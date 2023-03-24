@@ -1,16 +1,17 @@
-\documentclass{bmstu}
+\documentclass[a4paper]{bmstu}
 
-\bibliography{biblio}
+\usepackage{biblatex}
+\addbibresource{biblio.bib}
 
 \begin{document}
+	
+\setcounter{page}{5}
 
-\makeresearchtitle{}{}{}{}{}{}{}{}
+\include{01-abstract}
 
 \maketableofcontents
 
-\include{01-definitions}
-\include{02-abbreviations}
-
+\include{02-naming}
 \include{03-introduction}
 \include{04-analysis}
 \include{05-design}
