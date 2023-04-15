@@ -1,0 +1,60 @@
+<mxfile host="Electron" modified="2023-04-15T16:56:38.186Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="UwoX9yyMwiDINjzcd_1-" version="21.1.2" type="device">
+  <diagram name="Страница 1" id="hjOPlcU7pmI-ObDb7hjX">
+    <mxGraphModel dx="1434" dy="844" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="1aDXXoZq-1LKnwfSjQf9-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" parent="1" source="1aDXXoZq-1LKnwfSjQf9-1" target="1aDXXoZq-1LKnwfSjQf9-3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1aDXXoZq-1LKnwfSjQf9-1" value="Начало" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.terminator;whiteSpace=wrap;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="344" y="10" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="1aDXXoZq-1LKnwfSjQf9-2" value="Конец" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.terminator;whiteSpace=wrap;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="344" y="480" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="1aDXXoZq-1LKnwfSjQf9-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;" parent="1" target="1aDXXoZq-1LKnwfSjQf9-8" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="414" y="250" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1aDXXoZq-1LKnwfSjQf9-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;" parent="1" source="1aDXXoZq-1LKnwfSjQf9-3" target="1aDXXoZq-1LKnwfSjQf9-8" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1aDXXoZq-1LKnwfSjQf9-3" value="Снимки окружения" style="shape=parallelogram;html=1;strokeWidth=2;perimeter=parallelogramPerimeter;whiteSpace=wrap;rounded=0;arcSize=12;size=0.23;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="344" y="130" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="1aDXXoZq-1LKnwfSjQf9-12" value="Да" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;endArrow=none;endFill=0;" parent="1" source="1aDXXoZq-1LKnwfSjQf9-8" target="1aDXXoZq-1LKnwfSjQf9-11" edge="1">
+          <mxGeometry x="-0.0791" y="-15" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1aDXXoZq-1LKnwfSjQf9-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;entryPerimeter=0;" parent="1" source="1aDXXoZq-1LKnwfSjQf9-8" target="1aDXXoZq-1LKnwfSjQf9-2" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="414" y="480" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="530" y="295" />
+              <mxPoint x="530" y="460" />
+              <mxPoint x="414" y="460" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1aDXXoZq-1LKnwfSjQf9-8" value="Требуется ли компоновка?" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="334" y="250" width="160" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="1aDXXoZq-1LKnwfSjQf9-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;entryPerimeter=0;" parent="1" source="1aDXXoZq-1LKnwfSjQf9-11" target="1aDXXoZq-1LKnwfSjQf9-2" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="250" y="460" />
+              <mxPoint x="414" y="460" />
+            </Array>
+            <mxPoint x="414" y="480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1aDXXoZq-1LKnwfSjQf9-11" value="Компоновка снимков в карту сферы" style="verticalLabelPosition=middle;verticalAlign=middle;html=1;shape=process;whiteSpace=wrap;rounded=0;size=0.14;arcSize=6;strokeWidth=2;labelPosition=center;align=center;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="170" y="340" width="160" height="90" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
