@@ -1,0 +1,131 @@
+<mxfile host="Electron" modified="2023-04-16T18:21:22.459Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="8Apb_9n_fi9I5fKfjwqw" version="21.1.2" type="device">
+  <diagram name="Страница 1" id="vSN0zOsbVQ_ziBr6iRNW">
+    <mxGraphModel dx="2415" dy="1398" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="NfnfCwqI7M4uG_9BYdU6-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" parent="1" source="NfnfCwqI7M4uG_9BYdU6-1" target="NfnfCwqI7M4uG_9BYdU6-3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NfnfCwqI7M4uG_9BYdU6-1" value="Начало" style="strokeWidth=2;html=1;shape=stencil(xVVNb4MwDP01HJmAaFV7nFh37GWTdnapC1FDgpysH/9+gYBaSukgl0kc8DO85+fYSsBSXUCFQRJJKDFg70GSfCGVXIJRZAObKRy8iFx4cuFq6ULQFWbGYUcgDluBLqMNqQOe+M60DFwWSNzUWbYOojf7Tf2wNFNSWhKupO5lbvKWDLi0/0ZnRxa9vDqZSxu7qLIKJRqkHno1t3FAkHx4K8XTlD49lPqOOt2/lL7nK8V+Smuf7sX3YvHEDm48jD2QW64mHpiXXMc+351XMwdyk92NyLHUImMLyNItZIec1I/cPSyygnq5B4kuXaojXqtnd/P9zH/HILi8YVgs5zMAZfaFWobuH7r0azqHcOY6JGWgbkOPXwDlGFqecC8g76X0CbG6gduzf1zuwsPxXc+mUfyjZZ8zzoTS+GQTLD6YswYdGU6W7hXhk6ndcyHc7TS2EAOCBnV3ZQP8Ag==);whiteSpace=wrap;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry x="288" y="10" width="250" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="NfnfCwqI7M4uG_9BYdU6-3" target="ST-hCxSPFe-SYE2UlP30-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NfnfCwqI7M4uG_9BYdU6-3" value="&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;Карта глубины D с разрешением &lt;br&gt;w на&amp;nbsp;h, порог &lt;br&gt;прерывистости &lt;br&gt;глубины Δd&lt;sub&gt;max&lt;/sub&gt; = &lt;br&gt;0.5" style="shape=parallelogram;html=1;strokeWidth=2;perimeter=parallelogramPerimeter;whiteSpace=wrap;rounded=0;arcSize=12;size=0.17625;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry x="313" y="120" width="200" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="A0MCLNn6qekpqNKE2fol-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" parent="1" source="ST-hCxSPFe-SYE2UlP30-1" target="A0MCLNn6qekpqNKE2fol-6" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="412" y="370" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="A0MCLNn6qekpqNKE2fol-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;" parent="1" source="A0MCLNn6qekpqNKE2fol-6" target="A0MCLNn6qekpqNKE2fol-22" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="760" y="430" />
+              <mxPoint x="760" y="1450" />
+              <mxPoint x="413" y="1450" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="A0MCLNn6qekpqNKE2fol-6" target="ST-hCxSPFe-SYE2UlP30-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A0MCLNn6qekpqNKE2fol-6" value="i := 1 .. n" style="verticalLabelPosition=middle;verticalAlign=middle;html=1;shape=hexagon;perimeter=hexagonPerimeter2;arcSize=6;size=0.13;labelPosition=center;align=center;strokeWidth=2;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry x="312" y="400" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="A0MCLNn6qekpqNKE2fol-8" target="ST-hCxSPFe-SYE2UlP30-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A0MCLNn6qekpqNKE2fol-8" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;font face=&quot;sans-serif&quot; color=&quot;#202122&quot;&gt;&lt;span style=&quot;background-color: rgb(248, 249, 250);&quot;&gt;d0 := D[p.x, p.y]&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fontSize=17;fontStyle=0" parent="1" vertex="1">
+          <mxGeometry x="314" y="580" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="A0MCLNn6qekpqNKE2fol-22" value="Конец" style="strokeWidth=2;html=1;shape=stencil(xVVNb4MwDP01HJmAaFV7nFh37GWTdnapC1FDgpysH/9+gYBaSukgl0kc8DO85+fYSsBSXUCFQRJJKDFg70GSfCGVXIJRZAObKRy8iFx4cuFq6ULQFWbGYUcgDluBLqMNqQOe+M60DFwWSNzUWbYOojf7Tf2wNFNSWhKupO5lbvKWDLi0/0ZnRxa9vDqZSxu7qLIKJRqkHno1t3FAkHx4K8XTlD49lPqOOt2/lL7nK8V+Smuf7sX3YvHEDm48jD2QW64mHpiXXMc+351XMwdyk92NyLHUImMLyNItZIec1I/cPSyygnq5B4kuXaojXqtnd/P9zH/HILi8YVgs5zMAZfaFWobuH7r0azqHcOY6JGWgbkOPXwDlGFqecC8g76X0CbG6gduzf1zuwsPxXc+mUfyjZZ8zzoTS+GQTLD6YswYdGU6W7hXhk6ndcyHc7TS2EAOCBnV3ZQP8Ag==);whiteSpace=wrap;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry x="288" y="1480" width="250" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-1" value="Инициализация сетки с вершинами V и индексами I&amp;nbsp;" style="verticalLabelPosition=middle;verticalAlign=middle;html=1;shape=process;whiteSpace=wrap;rounded=0;size=0.14;arcSize=6;strokeWidth=2;labelPosition=center;align=center;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="313" y="290" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="ST-hCxSPFe-SYE2UlP30-3" target="A0MCLNn6qekpqNKE2fol-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-3" value="Поиск пикселя p карты глубины, соответствующий вершине V[i]" style="verticalLabelPosition=middle;verticalAlign=middle;html=1;shape=process;whiteSpace=wrap;rounded=0;size=0.14;arcSize=6;strokeWidth=2;labelPosition=center;align=center;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="313" y="480" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="ST-hCxSPFe-SYE2UlP30-7" target="ST-hCxSPFe-SYE2UlP30-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-7" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;font face=&quot;sans-serif&quot; color=&quot;#202122&quot;&gt;&lt;span style=&quot;background-color: rgb(248, 249, 250);&quot;&gt;d1 := D[p.x + 1, p.y]&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fontSize=17;fontStyle=0" vertex="1" parent="1">
+          <mxGeometry x="314" y="660" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="ST-hCxSPFe-SYE2UlP30-8" target="ST-hCxSPFe-SYE2UlP30-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-8" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;font face=&quot;sans-serif&quot; color=&quot;#202122&quot;&gt;&lt;span style=&quot;background-color: rgb(248, 249, 250);&quot;&gt;d2 := D[p.x, p.y + 1]&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fontSize=17;fontStyle=0" vertex="1" parent="1">
+          <mxGeometry x="314" y="740" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="ST-hCxSPFe-SYE2UlP30-9" target="ST-hCxSPFe-SYE2UlP30-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-9" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;font face=&quot;sans-serif&quot; color=&quot;#202122&quot;&gt;&lt;span style=&quot;background-color: rgb(248, 249, 250);&quot;&gt;d3 := D[p.x + 1, p.y + 1]&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fontSize=17;fontStyle=0" vertex="1" parent="1">
+          <mxGeometry x="314" y="820" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="ST-hCxSPFe-SYE2UlP30-13" target="ST-hCxSPFe-SYE2UlP30-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-13" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;font face=&quot;sans-serif&quot; color=&quot;#202122&quot;&gt;&lt;span style=&quot;background-color: rgb(248, 249, 250);&quot;&gt;&amp;nbsp;d_avg := (d0 + d1 + d2 +&amp;nbsp; &amp;nbsp;d3) / 4&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fontSize=17;fontStyle=0" vertex="1" parent="1">
+          <mxGeometry x="314" y="900" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;" edge="1" parent="1" source="ST-hCxSPFe-SYE2UlP30-15" target="ST-hCxSPFe-SYE2UlP30-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-15" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;font face=&quot;sans-serif&quot; color=&quot;#202122&quot;&gt;&lt;span style=&quot;background-color: rgb(248, 249, 250);&quot;&gt;&amp;nbsp;d_list := [d0, d1, d2, d3]&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fontSize=17;fontStyle=0" vertex="1" parent="1">
+          <mxGeometry x="314" y="980" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-20" value="Да" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;endArrow=none;endFill=0;" edge="1" parent="1" source="ST-hCxSPFe-SYE2UlP30-17" target="ST-hCxSPFe-SYE2UlP30-19">
+          <mxGeometry x="-0.3415" y="-10" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="ST-hCxSPFe-SYE2UlP30-17" target="ST-hCxSPFe-SYE2UlP30-21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-17" value="&lt;br&gt;any(|d_list - d_avg| &amp;gt;=Δd&lt;sub style=&quot;border-color: var(--border-color);&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;max&lt;/font&gt;&lt;/sub&gt;)=1?" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="314" y="1060" width="200" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="ST-hCxSPFe-SYE2UlP30-19" target="A0MCLNn6qekpqNKE2fol-6">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="214" y="1350" />
+              <mxPoint x="410" y="1350" />
+              <mxPoint x="410" y="1410" />
+              <mxPoint x="80" y="1410" />
+              <mxPoint x="80" y="430" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-19" value="Исключить вершину V[i]" style="verticalLabelPosition=middle;verticalAlign=middle;html=1;shape=process;whiteSpace=wrap;rounded=0;size=0.14;arcSize=6;strokeWidth=2;labelPosition=center;align=center;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="114" y="1200" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-21" value="Перевести координаты вершины V[i] в мировые координаты" style="verticalLabelPosition=middle;verticalAlign=middle;html=1;shape=process;whiteSpace=wrap;rounded=0;size=0.14;arcSize=6;strokeWidth=2;labelPosition=center;align=center;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="514" y="1200" width="200" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="ST-hCxSPFe-SYE2UlP30-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="ST-hCxSPFe-SYE2UlP30-21" target="A0MCLNn6qekpqNKE2fol-6">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="614" y="1310" as="sourcePoint" />
+            <mxPoint x="312" y="430" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="614" y="1350" />
+              <mxPoint x="410" y="1350" />
+              <mxPoint x="410" y="1410" />
+              <mxPoint x="80" y="1410" />
+              <mxPoint x="80" y="430" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
