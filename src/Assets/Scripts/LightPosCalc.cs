@@ -29,9 +29,10 @@ public class LightPosCalc : MonoBehaviour
         var grayscaled = new Mat();
         Cv2.CvtColor(env.SpherePano, grayscaled, ColorConversionCodes.RGBA2GRAY);
 
-        var tex = OpenCvSharp.Unity.MatToTexture(grayscaled);
-
+        //var tex = OpenCvSharp.Unity.MatToTexture(grayscaled);
         //var bytes = tex.EncodeToPNG();
         //File.WriteAllBytes(@"D:\gray.png", bytes);
+
+
     }
 }
