@@ -30,8 +30,14 @@ public class SavePhotos : MonoBehaviour
         List<Mat> photos = new List<Mat>();
         foreach (string file in files)
             if (file.EndsWith(".png"))
-                photos.Add(Cv2.ImRead(file));
+            {
+                byte[] fileData = File.ReadAllBytes(file);
+                var tex = new Texture2D(2, 2);
+                tex.LoadImage(fileData);
+                var fileContent = OpenCvSharp.Unity.TextureToMat(tex);
 
+                photos.Add(fileContent);
+            }
         var stitcher = Stitcher.Create();
         Mat pano = new();
         stitcher.Stitch(photos, pano);

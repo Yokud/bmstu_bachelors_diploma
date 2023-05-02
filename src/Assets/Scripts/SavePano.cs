@@ -22,8 +22,11 @@ public class SavePano : MonoBehaviour
         string path = EditorUtility.OpenFilePanel("Select spherical environment image", "", "png");
         if (path.Length != 0)
         {
-            var fileContent = Cv2.ImRead(path);
-            
+            byte[] fileData = File.ReadAllBytes(path);
+            var tex = new Texture2D(2, 2);
+            tex.LoadImage(fileData);
+            var fileContent = OpenCvSharp.Unity.TextureToMat(tex);
+
             var env = PanoReceiver.GetComponent<EnvDataFields>();
             env.SpherePano = fileContent;
         }

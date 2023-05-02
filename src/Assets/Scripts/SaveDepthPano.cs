@@ -1,6 +1,7 @@
 using OpenCvSharp;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,7 +22,10 @@ public class SaveDepthPano : MonoBehaviour
         string path = EditorUtility.OpenFilePanel("Select spherical environment depth image", "", "png");
         if (path.Length != 0)
         {
-            var fileContent = Cv2.ImRead(path);
+            byte[] fileData = File.ReadAllBytes(path);
+            var tex = new Texture2D(2, 2);
+            tex.LoadImage(fileData);
+            var fileContent = OpenCvSharp.Unity.TextureToMat(tex);
 
             var env = PanoReceiver.GetComponent<EnvDataFields>();
             env.SphereDepthPano = fileContent;
