@@ -10,7 +10,7 @@ public class LightPosCalc : MonoBehaviour
 {
     const double MinPixelsCoveragePercent = 0.98;
 
-    public int MedianBlurWindow = 9;
+    public int MedianBlurWindow = 7;
     public Button StartButton;
     public GameObject EnvironmentData;
     public GameObject LightCoordsReceiver;
@@ -68,21 +68,45 @@ public class LightPosCalc : MonoBehaviour
 
         var moments = new Moments[contours.Length];
         var centroids = new Point[contours.Length];
+        var radiuses = new float[contours.Length];
         for (int i = 0; i < contours.Length; i++)
         {
             moments[i] = Cv2.Moments(contours[i]);
             centroids[i] = new Point(moments[i].M10 / moments[i].M00, moments[i].M01 / moments[i].M00);
+            radiuses[i] = GetAverageContourDepth(env, contours[i], 0);
         }
 
         var polarCoords = new Vector3[centroids.Length];
         var decartCoords = new Vector3[centroids.Length];
         for (int i = 0; i < centroids.Length; i++)
         {
-            polarCoords[i] = new Vector3(2 * Mathf.PI * centroids[i].X / spherePanoWidth, Mathf.PI * (spherePanoHeight - centroids[i].Y) / spherePanoHeight, 10); // 10 - заглушка для радиуса
+            polarCoords[i] = new Vector3(2 * Mathf.PI * centroids[i].X / spherePanoWidth, Mathf.PI * (spherePanoHeight - centroids[i].Y) / spherePanoHeight, radiuses[i]);
             decartCoords[i] = new Vector3(polarCoords[i].z * Mathf.Sin(polarCoords[i].x) * Mathf.Cos(polarCoords[i].y), polarCoords[i].z * Mathf.Sin(polarCoords[i].x) * Mathf.Sin(polarCoords[i].y), polarCoords[i].z * Mathf.Cos(polarCoords[i].y));
         }
 
-        //Debug.Log(decartCoords[0]);
+        var ds = LightCoordsReceiver.GetComponent<DataStorageInfo>();
+        ds.LightCoords = decartCoords.ToList();
+    }
+
+    float GetAverageContourDepth(EnvDataFields env, Point[] contour, int notValidValue)
+    {
+        var minX = contour.Min(p => p.X);
+        var maxX = contour.Max(p => p.X);
+        var minY = contour.Min(p => p.Y);
+        var maxY = contour.Max(p => p.Y);
+
+        long sumDepth = 0;
+        var validPoints = 0;
+
+        for (int i = minX; i < maxX; i++) 
+            for (int j = minY; j < maxY; j++)
+                if (env.SphereDepthPano.At<int>(i, j) != notValidValue)
+                {
+                    sumDepth += env.SphereDepthPano.At<int>(i, j);
+                    validPoints++;
+                }
+
+        return sumDepth / (float)validPoints;
     }
 
     void SavePng(Mat image, string filename)
