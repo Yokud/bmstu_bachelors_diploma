@@ -2,6 +2,7 @@ using OpenCvSharp;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ public class LightPosCalc : MonoBehaviour
 {
     const double MinPixelsCoveragePercent = 0.98;
 
+    public int MedianBlurWindow = 9;
     public Button StartButton;
     public GameObject EnvironmentData;
     public GameObject LightCoordsReceiver;
@@ -28,6 +30,7 @@ public class LightPosCalc : MonoBehaviour
             return;
         }
 
+        int spherePanoWidth = env.SpherePano.Width, spherePanoHeight = env.SpherePano.Height;
         var grayscaled = new Mat();
         Cv2.CvtColor(env.SpherePano, grayscaled, ColorConversionCodes.BGRA2GRAY);
 
@@ -43,7 +46,7 @@ public class LightPosCalc : MonoBehaviour
         // Histogram analysis
         var hist = new Mat();
         Cv2.CalcHist(new[] { grayscaled }, new[] { 0 }, null, hist, 1, new[] { 256 }, new[] { new Rangef(0, 256) });
-        var sumPixels = (double)grayscaled.Width * grayscaled.Height;
+        var sumPixels = (double)spherePanoWidth * spherePanoHeight;
 
         var brightnessVal = 255;
         while (hist.RowRange(brightnessVal, 256).Sum().Val0 / sumPixels < 1 - MinPixelsCoveragePercent)
@@ -52,13 +55,40 @@ public class LightPosCalc : MonoBehaviour
         var thresholded = new Mat();
         Cv2.Threshold(grayscaled, thresholded, brightnessVal - 1, 255, ThresholdTypes.Tozero); // Затемняем пиксели, яркость которых меньше brightnessVal
         var filtered = new Mat();
-        Cv2.MedianBlur(thresholded, filtered, 7);
+        Cv2.MedianBlur(thresholded, filtered, MedianBlurWindow);
+
+        Cv2.FindContours(filtered, out Point[][] contours, out HierarchyIndex[] hierarchy, RetrievalModes.Tree, ContourApproximationModes.ApproxSimple);
+
+        //var contoursImage = Mat.Zeros(filtered.Size(), filtered.Type()).ToMat();
+        //for (int i = 0; i < contours.Length; i++)
+        //{
+        //    Cv2.DrawContours(contoursImage, contours, i, Scalar.White, 1, hierarchy: hierarchy, maxLevel: 0);
+        //}
+        //SavePng(contoursImage, @"D:\testContours.png");
+
+        var moments = new Moments[contours.Length];
+        var centroids = new Point[contours.Length];
+        for (int i = 0; i < contours.Length; i++)
+        {
+            moments[i] = Cv2.Moments(contours[i]);
+            centroids[i] = new Point(moments[i].M10 / moments[i].M00, moments[i].M01 / moments[i].M00);
+        }
+
+        var polarCoords = new Vector3[centroids.Length];
+        var decartCoords = new Vector3[centroids.Length];
+        for (int i = 0; i < centroids.Length; i++)
+        {
+            polarCoords[i] = new Vector3(2 * Mathf.PI * centroids[i].X / spherePanoWidth, Mathf.PI * (spherePanoHeight - centroids[i].Y) / spherePanoHeight, 10); // 10 - заглушка для радиуса
+            decartCoords[i] = new Vector3(polarCoords[i].z * Mathf.Sin(polarCoords[i].x) * Mathf.Cos(polarCoords[i].y), polarCoords[i].z * Mathf.Sin(polarCoords[i].x) * Mathf.Sin(polarCoords[i].y), polarCoords[i].z * Mathf.Cos(polarCoords[i].y));
+        }
+
+        //Debug.Log(decartCoords[0]);
     }
 
-    void SavePng(Mat image)
+    void SavePng(Mat image, string filename)
     {
         var tex = OpenCvSharp.Unity.MatToTexture(image);
         var bytes = tex.EncodeToPNG();
-        File.WriteAllBytes(@"D:\filtered.png", bytes);
+        File.WriteAllBytes(filename, bytes);
     }
 }
