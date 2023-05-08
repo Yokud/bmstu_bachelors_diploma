@@ -73,7 +73,7 @@ public class LightPosCalc : MonoBehaviour
         {
             moments[i] = Cv2.Moments(contours[i]);
             centroids[i] = new Point(moments[i].M10 / moments[i].M00, moments[i].M01 / moments[i].M00);
-            radiuses[i] = GetAverageContourDepth(env, contours[i], 0);
+            radiuses[i] = GetAverageContourDepth(env, contours[i]);
         }
 
         var polarCoords = new Vector3[centroids.Length];
@@ -88,25 +88,25 @@ public class LightPosCalc : MonoBehaviour
         ds.LightCoords = decartCoords.ToList();
     }
 
-    float GetAverageContourDepth(EnvDataFields env, Point[] contour, int notValidValue)
+    float GetAverageContourDepth(EnvDataFields env, Point[] contour, int notValidValue = 0)
     {
         var minX = contour.Min(p => p.X);
         var maxX = contour.Max(p => p.X);
         var minY = contour.Min(p => p.Y);
         var maxY = contour.Max(p => p.Y);
 
-        long sumDepth = 0;
+        float sumDepth = 0;
         var validPoints = 0;
 
         for (int i = minX; i < maxX; i++) 
             for (int j = minY; j < maxY; j++)
                 if (env.SphereDepthPano.At<int>(i, j) != notValidValue)
                 {
-                    sumDepth += env.SphereDepthPano.At<int>(i, j);
+                    sumDepth += (env.SphereDepthPano.At<int>(i, j) - 1) / 254f * 3.2f + 0.8f;
                     validPoints++;
                 }
 
-        return sumDepth / (float)validPoints;
+        return sumDepth / validPoints;
     }
 
     void SavePng(Mat image, string filename)
