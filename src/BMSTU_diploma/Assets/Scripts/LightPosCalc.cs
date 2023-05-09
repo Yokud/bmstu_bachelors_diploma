@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LightPosCalc : MonoBehaviour
@@ -59,13 +60,6 @@ public class LightPosCalc : MonoBehaviour
 
         Cv2.FindContours(filtered, out Point[][] contours, out HierarchyIndex[] hierarchy, RetrievalModes.Tree, ContourApproximationModes.ApproxSimple);
 
-        //var contoursImage = Mat.Zeros(filtered.Size(), filtered.Type()).ToMat();
-        //for (int i = 0; i < contours.Length; i++)
-        //{
-        //    Cv2.DrawContours(contoursImage, contours, i, Scalar.White, 1, hierarchy: hierarchy, maxLevel: 0);
-        //}
-        //SavePng(contoursImage, @"D:\testContours.png");
-
         var moments = new Moments[contours.Length];
         var centroids = new Point[contours.Length];
         var radiuses = new float[contours.Length];
@@ -86,6 +80,8 @@ public class LightPosCalc : MonoBehaviour
 
         var ds = LightCoordsReceiver.GetComponent<DataStorageInfo>();
         ds.LightCoords = decartCoords.ToList();
+
+        SceneManager.LoadScene("ARScene");
     }
 
     float GetAverageContourDepth(EnvDataFields env, Point[] contour, int notValidValue = 0)
