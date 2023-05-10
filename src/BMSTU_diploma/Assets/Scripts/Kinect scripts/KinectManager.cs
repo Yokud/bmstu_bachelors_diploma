@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class KinectManager : MonoBehaviour
@@ -203,7 +204,8 @@ public class KinectManager : MonoBehaviour
             if (colorStreamHandle != IntPtr.Zero && KinectWrapper.PollColor(colorStreamHandle, ref colorMap, ref colorImage))
             {
                 UpdateColorMap();
-                bg.sprite = Sprite.Create(ColorTexture, new Rect(0 ,0, Width, Height), new Vector2());
+                if (bg != null)
+                    bg.sprite = Sprite.Create(ColorTexture, new Rect(0 ,0, Width, Height), new Vector2());
                 //bg.canvas.App
                 //Graphics.Blit(ColorTexture, Camera.main.targetTexture);
             }
@@ -212,7 +214,7 @@ public class KinectManager : MonoBehaviour
         // Kill the program with ESC.
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Application.Quit();
+            SceneManager.LoadScene("Menu");
         }
     }
 
