@@ -329,10 +329,28 @@ public class KinectWrapper
 
             for (int pix = 0; pix < totalPixels; pix++)
             {
-                colorImage[pix].r = cb.pixels[pix].r;
-                colorImage[pix].g = cb.pixels[pix].g;
-                colorImage[pix].b = cb.pixels[pix].b;
-                colorImage[pix].a = 255;
+                int ind = pix; // totalPixels - pix - 1;
+
+                colorImage[ind].r = cb.pixels[pix].r;
+                colorImage[ind].g = cb.pixels[pix].g;
+                colorImage[ind].b = cb.pixels[pix].b;
+                colorImage[ind].a = 255;
+            }
+
+			// flip horizontally
+            for (int j = 0; j < Constants.ColorImageHeight; j++)
+            {
+                int rowStart = 0;
+                int rowEnd = Constants.ColorImageWidth - 1;
+
+                while (rowStart < rowEnd)
+                {
+                    Color hold = colorImage[j * Constants.ColorImageWidth + rowStart];
+                    colorImage[j * Constants.ColorImageWidth + rowStart] = colorImage[(j * Constants.ColorImageWidth) + rowEnd];
+                    colorImage[j * Constants.ColorImageWidth + rowEnd] = hold;
+                    rowStart++;
+                    rowEnd--;
+                }
             }
 
             frameTexture.UnlockRect(0);

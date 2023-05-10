@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class KinectAdministrator : MonoBehaviour
 {
-    public Mesh Mesh;
+    public GameObject PlaneGrid;
 
     // Kinect elevation angle (in degrees)
     public int SensorAngle = 0;
@@ -22,7 +22,7 @@ public class KinectAdministrator : MonoBehaviour
     public UnityEngine.UI.Text CalibrationText;
 
     // Bool to keep track of whether Kinect has been initialized
-    private bool KinectInitialized = false;
+    private bool kinectInitialized = false;
 
     Matrix4x4 kinectToWorld, flipMatrix;
     static KinectAdministrator instance;
@@ -34,9 +34,6 @@ public class KinectAdministrator : MonoBehaviour
     private int mapSize;
 
     // Depth data
-    private Texture2D depthTexture;
-    private Color32[] depthImage;
-    private Rect depthRect;
     private ushort[] depthMap;
 
     // Color data
@@ -45,20 +42,26 @@ public class KinectAdministrator : MonoBehaviour
     private Rect colorRect;
     private byte[] colorMap;
 
+    // Mesh info
+    Vector3[] newVertices;
+    Vector3[] newNormals;
+    int[] newTriangles;
+    Mesh MyMesh;
+    ushort[] FilterdAndCroppedDepthImage;
+    float[] FloatValues;
+    int WidthBuffer;
+    int HeightBuffer;
+
+    int Width = KinectWrapper.GetDepthWidth();
+    int Height = KinectWrapper.GetDepthHeight();
+    int MinDepthValue = KinectWrapper.GetMinDepth();
+    int MaxDepthValue = KinectWrapper.GetMaxDepth();
+    public float MeshHeigth;
+
     // returns the single KinectManager instance
     public static KinectAdministrator Instance => instance;
 
-    // checks if Kinect is initialized and ready to use. If not, there was an error during Kinect-sensor initialization
-    public static bool IsKinectInitialized()
-    {
-        return instance != null ? instance.IsInitialized() : false;
-    }
-
-    // checks if Kinect is initialized and ready to use. If not, there was an error during Kinect-sensor initialization
-    public bool IsInitialized()
-    {
-        return KinectInitialized;
-    }
+    public bool KinectInitialized => kinectInitialized;
 
     void Awake()
     {
@@ -105,6 +108,8 @@ public class KinectAdministrator : MonoBehaviour
             flipMatrix = Matrix4x4.identity;
             flipMatrix[2, 2] = -1;
 
+
+
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
@@ -129,16 +134,12 @@ public class KinectAdministrator : MonoBehaviour
             return;
         }
 
-        // Initialize depth & label map related stuff
+        // Initialize depth map related stuff
         mapSize = KinectWrapper.GetDepthWidth() * KinectWrapper.GetDepthHeight();
-        depthTexture = new Texture2D(KinectWrapper.GetDepthWidth(), KinectWrapper.GetDepthHeight());
-        depthImage = new Color32[mapSize];
-
         depthMap = new ushort[mapSize];
 
         // Initialize color map related stuff
         ColorTexture = new Texture2D(KinectWrapper.GetColorWidth(), KinectWrapper.GetColorHeight());
-
         colorImage = new Color32[KinectWrapper.GetColorWidth() * KinectWrapper.GetColorHeight()];
         colorMap = new byte[colorImage.Length << 2];
 
@@ -150,13 +151,13 @@ public class KinectAdministrator : MonoBehaviour
 
         Debug.Log("Kinect initialized.");
 
-        KinectInitialized = true;
+        kinectInitialized = true;
     }
 
     // Make sure to kill the Kinect on quitting.
     void OnApplicationQuit()
     {
-        if (KinectInitialized)
+        if (kinectInitialized)
         {
             // Shutdown OpenNI
             KinectWrapper.NuiShutdown();
@@ -167,13 +168,20 @@ public class KinectAdministrator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        WidthBuffer = Width;
+        HeightBuffer = Height;
+
+        MyMesh = new Mesh();
+        MyMesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+        PlaneGrid.GetComponent<MeshFilter>().mesh = MyMesh;
+
+        SetupArrays();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (KinectInitialized)
+        if (kinectInitialized)
         {
             // needed by the KinectExtras' native wrapper to check for next frames
             // uncomment the line below, if you use the Extras' wrapper, but none of the Extras' managers
@@ -181,7 +189,10 @@ public class KinectAdministrator : MonoBehaviour
 
             if (depthStreamHandle != IntPtr.Zero && KinectWrapper.PollDepth(depthStreamHandle, KinectWrapper.Constants.IsNearMode, ref depthMap))
             {
-                UpdateDepthMap();
+                CheckArrays();
+                //FilterDepthMap();
+                CalculateFloatValues();
+                UpdateMesh();
             }
 
             if (colorStreamHandle != IntPtr.Zero && KinectWrapper.PollColor(colorStreamHandle, ref colorMap, ref colorImage))
@@ -199,7 +210,7 @@ public class KinectAdministrator : MonoBehaviour
 
     void OnGUI()
     {
-        if (KinectInitialized)
+        if (kinectInitialized)
         {
             if (colorRect.width == 0 || ColorTexture.height == 0)
             {
@@ -220,46 +231,98 @@ public class KinectAdministrator : MonoBehaviour
             }
 
             GUI.DrawTexture(colorRect, ColorTexture);
-
-            if (depthRect.width == 0 || depthRect.height == 0)
-            {
-                // get the main camera rectangle
-                Rect cameraRect = Camera.main.pixelRect;
-
-                // calculate map width and height in percent, if needed
-                if (DisplayMapsWidthPercent == 0f)
-                {
-                    DisplayMapsWidthPercent = (KinectWrapper.GetDepthWidth() / 2) * 100 / cameraRect.width;
-                }
-
-                float displayMapsWidthPercent = DisplayMapsWidthPercent / 100f;
-                float displayMapsHeightPercent = displayMapsWidthPercent * KinectWrapper.GetDepthHeight() / KinectWrapper.GetDepthWidth();
-
-                float displayWidth = cameraRect.width * displayMapsWidthPercent;
-                float displayHeight = cameraRect.width * displayMapsHeightPercent;
-
-                depthRect = new Rect(cameraRect.width - displayWidth, cameraRect.height, displayWidth, -displayHeight);
-            }
-
-            GUI.DrawTexture(depthRect, depthTexture);
         }
     }
 
-    // Update the User Map
-    void UpdateDepthMap()
+    void CheckArrays()
+    {
+        if ((Width != WidthBuffer) || (Height != HeightBuffer))
+        {
+            SetupArrays();
+            WidthBuffer = Width;
+            HeightBuffer = Height;
+        }
+    }
+
+    void SetupArrays()
+    {
+        FilterdAndCroppedDepthImage = new ushort[Width * Height];
+        FloatValues = new float[Width * Height];
+        newVertices = new Vector3[Width * Height];
+        newNormals = new Vector3[Width * Height];
+        newTriangles = new int[(Width - 1) * (Height - 1) * 6];
+
+        for (int H = 0; H < Height; H++)
+        {
+            for (int W = 0; W < Width; W++)
+            {
+                int Index = GetArrayIndex(W, H);
+                newVertices[Index] = new Vector3(W, H, 0f);
+                newNormals[Index] = new Vector3(0, 0, 1);
+
+                if ((W != (Width - 1)) && (H != (Height - 1)))
+                {
+                    int TopLeft = Index;
+                    int TopRight = Index + 1;
+                    int BotLeft = Index + Width;
+                    int BotRight = Index + 1 + Width;
+
+                    int TrinagleIndex = W + H * (Width - 1);
+                    newTriangles[TrinagleIndex * 6 + 0] = TopLeft;
+                    newTriangles[TrinagleIndex * 6 + 1] = BotLeft;
+                    newTriangles[TrinagleIndex * 6 + 2] = TopRight;
+                    newTriangles[TrinagleIndex * 6 + 3] = BotLeft;
+                    newTriangles[TrinagleIndex * 6 + 4] = BotRight;
+                    newTriangles[TrinagleIndex * 6 + 5] = TopRight;
+                }
+            }
+        }
+
+        MyMesh.Clear();
+        MyMesh.vertices = newVertices;
+        MyMesh.normals = newNormals;
+        MyMesh.triangles = newTriangles;
+    }
+
+    void CalculateFloatValues()
     {
         for (int i = 0; i < mapSize; i++)
         {
-            // Flip the texture as we convert label map to color array
-            int flipIndex = i; // usersMapSize - i - 1;
+            int ImageValue = KinectWrapper.GetRealDepth(depthMap[mapSize - i - 1]);
 
-            float val = (KinectWrapper.GetRealDepth(depthMap[i]) - KinectWrapper.GetMinDepth()) / (float)KinectWrapper.DepthDelta();
-            depthImage[flipIndex] = new Color(val, val, val);
+            //Clamp Value
+            ImageValue = (ushort)Mathf.Clamp(ImageValue, MinDepthValue, MaxDepthValue);
+
+            //Calculate
+            float FloatValue = (ImageValue - MinDepthValue) / (float)(MaxDepthValue - MinDepthValue);
+            FloatValues[i] = FloatValue;
+        }
+    }
+
+    void UpdateMesh()
+    {
+        for (int i = 0; i < mapSize; i++)
+            ProcessPixel(i);
+
+        MyMesh.vertices = newVertices;
+        MyMesh.RecalculateBounds();
+        MyMesh.RecalculateNormals();
+    }
+
+    void ProcessPixel(int i)
+    {
+        //Calc Position
+        newVertices[i].z = FloatValues[i] * MeshHeigth;
+    }
+
+    int GetArrayIndex(int W, int H)
+    {
+        if ((W < 0) || (W >= Width) || (H < 0) || (H >= Height))
+        {
+            return -1;
         }
 
-        // Draw it!
-        depthTexture.SetPixels32(depthImage);
-        depthTexture.Apply();
+        return W + H * Width;
     }
 
     // Update the Color Map
