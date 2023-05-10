@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class KinectAdministrator : MonoBehaviour
+public class KinectManager : MonoBehaviour
 {
     public GameObject PlaneGrid;
+    public GameObject Background;
 
     // Kinect elevation angle (in degrees)
     public int SensorAngle = 0;
@@ -25,7 +27,7 @@ public class KinectAdministrator : MonoBehaviour
     private bool kinectInitialized = false;
 
     Matrix4x4 kinectToWorld, flipMatrix;
-    static KinectAdministrator instance;
+    static KinectManager instance;
 
     // Image stream handles for the kinect
     private IntPtr colorStreamHandle;
@@ -58,8 +60,10 @@ public class KinectAdministrator : MonoBehaviour
     int MaxDepthValue = KinectWrapper.GetMaxDepth();
     public float MeshHeigth;
 
+    UnityEngine.UI.Image bg;
+
     // returns the single KinectManager instance
-    public static KinectAdministrator Instance => instance;
+    public static KinectManager Instance => instance;
 
     public bool KinectInitialized => kinectInitialized;
 
@@ -70,15 +74,14 @@ public class KinectAdministrator : MonoBehaviour
 
         try
         {
-            hr = KinectWrapper.NuiInitialize(KinectWrapper.NuiInitializeFlags.UsesSkeleton |
-                KinectWrapper.NuiInitializeFlags.UsesDepthAndPlayerIndex | KinectWrapper.NuiInitializeFlags.UsesColor);
+            hr = KinectWrapper.NuiInitialize(KinectWrapper.NuiInitializeFlags.UsesDepth | KinectWrapper.NuiInitializeFlags.UsesColor);
             if (hr != 0)
             {
                 throw new Exception("NuiInitialize Failed");
             }
 
             depthStreamHandle = IntPtr.Zero;
-            hr = KinectWrapper.NuiImageStreamOpen(KinectWrapper.NuiImageType.DepthAndPlayerIndex,
+            hr = KinectWrapper.NuiImageStreamOpen(KinectWrapper.NuiImageType.Depth,
                 KinectWrapper.Constants.DepthImageResolution, 0, 2, IntPtr.Zero, ref depthStreamHandle);
             if (hr != 0)
             {
@@ -107,8 +110,6 @@ public class KinectAdministrator : MonoBehaviour
             kinectToWorld.SetTRS(new Vector3(0.0f, SensorHeight, 0.0f), quatTiltAngle, Vector3.one);
             flipMatrix = Matrix4x4.identity;
             flipMatrix[2, 2] = -1;
-
-
 
             instance = this;
             DontDestroyOnLoad(gameObject);
@@ -171,9 +172,13 @@ public class KinectAdministrator : MonoBehaviour
         WidthBuffer = Width;
         HeightBuffer = Height;
 
-        MyMesh = new Mesh();
-        MyMesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+        MyMesh = new Mesh
+        {
+            indexFormat = UnityEngine.Rendering.IndexFormat.UInt32
+        };
         PlaneGrid.GetComponent<MeshFilter>().mesh = MyMesh;
+
+        bg = Background.GetComponentInChildren<UnityEngine.UI.Image>();
 
         SetupArrays();
     }
@@ -198,6 +203,9 @@ public class KinectAdministrator : MonoBehaviour
             if (colorStreamHandle != IntPtr.Zero && KinectWrapper.PollColor(colorStreamHandle, ref colorMap, ref colorImage))
             {
                 UpdateColorMap();
+                bg.sprite = Sprite.Create(ColorTexture, new Rect(0 ,0, Width, Height), new Vector2());
+                //bg.canvas.App
+                //Graphics.Blit(ColorTexture, Camera.main.targetTexture);
             }
         }
 
@@ -205,32 +213,6 @@ public class KinectAdministrator : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
-        }
-    }
-
-    void OnGUI()
-    {
-        if (kinectInitialized)
-        {
-            if (colorRect.width == 0 || ColorTexture.height == 0)
-            {
-                // get the main camera rectangle
-                Rect cameraRect = Camera.main.pixelRect;
-
-                // calculate map width and height in percent, if needed
-                if (DisplayMapsWidthPercent == 0f)
-                    DisplayMapsWidthPercent = (KinectWrapper.GetDepthWidth() / 2) * 100 / cameraRect.width;
-
-                float displayMapsWidthPercent = DisplayMapsWidthPercent / 100f;
-                float displayMapsHeightPercent = displayMapsWidthPercent * KinectWrapper.GetColorHeight() / KinectWrapper.GetColorWidth();
-
-                float displayWidth = cameraRect.width * displayMapsWidthPercent;
-                float displayHeight = cameraRect.width * displayMapsHeightPercent;
-
-                colorRect = new Rect(cameraRect.width - displayWidth, cameraRect.height, displayWidth, -displayHeight);
-            }
-
-            GUI.DrawTexture(colorRect, ColorTexture);
         }
     }
 
@@ -301,11 +283,12 @@ public class KinectAdministrator : MonoBehaviour
 
     void UpdateMesh()
     {
+        // надо добавить удаление полигонов с большим разрывом по глубине
+
         for (int i = 0; i < mapSize; i++)
             ProcessPixel(i);
 
         MyMesh.vertices = newVertices;
-        MyMesh.RecalculateBounds();
         MyMesh.RecalculateNormals();
     }
 

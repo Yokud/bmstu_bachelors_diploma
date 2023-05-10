@@ -329,7 +329,7 @@ public class KinectWrapper
 
             for (int pix = 0; pix < totalPixels; pix++)
             {
-                int ind = pix; // totalPixels - pix - 1;
+                int ind = totalPixels - pix - 1;
 
                 colorImage[ind].r = cb.pixels[pix].r;
                 colorImage[ind].g = cb.pixels[pix].g;
@@ -337,21 +337,21 @@ public class KinectWrapper
                 colorImage[ind].a = 255;
             }
 
-			// flip horizontally
-            for (int j = 0; j < Constants.ColorImageHeight; j++)
-            {
-                int rowStart = 0;
-                int rowEnd = Constants.ColorImageWidth - 1;
+			//// flip horizontally
+   //         for (int j = 0; j < Constants.ColorImageHeight; j++)
+   //         {
+   //             int rowStart = 0;
+   //             int rowEnd = Constants.ColorImageWidth - 1;
 
-                while (rowStart < rowEnd)
-                {
-                    Color hold = colorImage[j * Constants.ColorImageWidth + rowStart];
-                    colorImage[j * Constants.ColorImageWidth + rowStart] = colorImage[(j * Constants.ColorImageWidth) + rowEnd];
-                    colorImage[j * Constants.ColorImageWidth + rowEnd] = hold;
-                    rowStart++;
-                    rowEnd--;
-                }
-            }
+   //             while (rowStart < rowEnd)
+   //             {
+   //                 Color hold = colorImage[j * Constants.ColorImageWidth + rowStart];
+   //                 colorImage[j * Constants.ColorImageWidth + rowStart] = colorImage[(j * Constants.ColorImageWidth) + rowEnd];
+   //                 colorImage[j * Constants.ColorImageWidth + rowEnd] = hold;
+   //                 rowStart++;
+   //                 rowEnd--;
+   //             }
+   //         }
 
             frameTexture.UnlockRect(0);
 			hr = NuiImageStreamReleaseFrame(colorStreamHandle, imageFramePtr);
