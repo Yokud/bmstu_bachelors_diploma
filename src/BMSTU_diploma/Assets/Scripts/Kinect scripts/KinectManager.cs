@@ -1,7 +1,9 @@
+using OpenCvSharp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -42,7 +44,7 @@ public class KinectManager : MonoBehaviour
     // Color data
     private Texture2D ColorTexture;
     private Color32[] colorImage;
-    private Rect colorRect;
+    private UnityEngine.Rect colorRect;
     private byte[] colorMap;
 
     // Mesh info
@@ -50,7 +52,7 @@ public class KinectManager : MonoBehaviour
     Vector3[] newNormals;
     int[] newTriangles;
     Mesh MyMesh;
-    ushort[] FilterdAndCroppedDepthImage;
+    ushort[] filteredDepthMap;
     float[] FloatValues;
     int WidthBuffer;
     int HeightBuffer;
@@ -205,13 +207,10 @@ public class KinectManager : MonoBehaviour
             {
                 UpdateColorMap();
                 if (bg != null)
-                    bg.sprite = Sprite.Create(ColorTexture, new Rect(0 ,0, Width, Height), new Vector2());
-                //bg.canvas.App
-                //Graphics.Blit(ColorTexture, Camera.main.targetTexture);
+                    bg.sprite = Sprite.Create(ColorTexture, new UnityEngine.Rect(0 ,0, Width, Height), new Vector2());
             }
         }
 
-        // Kill the program with ESC.
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             SceneManager.LoadScene("Menu");
@@ -230,7 +229,7 @@ public class KinectManager : MonoBehaviour
 
     void SetupArrays()
     {
-        FilterdAndCroppedDepthImage = new ushort[Width * Height];
+        filteredDepthMap = new ushort[Width * Height];
         FloatValues = new float[Width * Height];
         newVertices = new Vector3[Width * Height];
         newNormals = new Vector3[Width * Height];
@@ -267,6 +266,17 @@ public class KinectManager : MonoBehaviour
         MyMesh.normals = newNormals;
         MyMesh.triangles = newTriangles;
     }
+
+    //void FilterDepthMap()
+    //{
+    //    Mat depthMat = new Mat(Width, Height, MatType.CV_16U, depthMap);
+
+    //    Mat filteredMat = new Mat();
+    //    Cv2.GaussianBlur(depthMat, filteredMat, new Size(11, 11), 4, 4);
+
+    //    filteredMat.GetArray(0, 0, filteredDepthMap);
+    //    //depthMat.GetArray(0, 0, filteredDepthMap);
+    //}
 
     void CalculateFloatValues()
     {
