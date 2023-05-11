@@ -52,10 +52,9 @@ public class KinectManager : MonoBehaviour
     Vector3[] newNormals;
     int[] newTriangles;
     Mesh MyMesh;
-    ushort[] filteredDepthMap;
+    //ushort[] filteredDepthMap;
     float[] FloatValues;
-    int WidthBuffer;
-    int HeightBuffer;
+    float verticesDepthDeltaTreshold = 0.15f;
 
     int Width = KinectWrapper.GetDepthWidth();
     int Height = KinectWrapper.GetDepthHeight();
@@ -172,9 +171,6 @@ public class KinectManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        WidthBuffer = Width;
-        HeightBuffer = Height;
-
         MyMesh = new Mesh
         {
             indexFormat = UnityEngine.Rendering.IndexFormat.UInt32
@@ -197,7 +193,6 @@ public class KinectManager : MonoBehaviour
 
             if (depthStreamHandle != IntPtr.Zero && KinectWrapper.PollDepth(depthStreamHandle, KinectWrapper.Constants.IsNearMode, ref depthMap))
             {
-                CheckArrays();
                 //FilterDepthMap();
                 CalculateFloatValues();
                 UpdateMesh();
@@ -217,19 +212,9 @@ public class KinectManager : MonoBehaviour
         }
     }
 
-    void CheckArrays()
-    {
-        if ((Width != WidthBuffer) || (Height != HeightBuffer))
-        {
-            SetupArrays();
-            WidthBuffer = Width;
-            HeightBuffer = Height;
-        }
-    }
-
     void SetupArrays()
     {
-        filteredDepthMap = new ushort[Width * Height];
+        //filteredDepthMap = new ushort[Width * Height];
         FloatValues = new float[Width * Height];
         newVertices = new Vector3[Width * Height];
         newNormals = new Vector3[Width * Height];
@@ -295,19 +280,52 @@ public class KinectManager : MonoBehaviour
 
     void UpdateMesh()
     {
-        // надо добавить удаление полигонов с большим разрывом по глубине
+        for (int H = 0; H < Height - 1; H++)
+        {
+            for (int W = 0; W < Width - 1; W++)
+            {
+                int Index00 = GetArrayIndex(W, H);
+                newVertices[Index00].z = FloatValues[Index00] * MeshHeigth;
 
-        for (int i = 0; i < mapSize; i++)
-            ProcessPixel(i);
+                int Index10 = GetArrayIndex(W + 1, H);
+                int Index01 = GetArrayIndex(W, H + 1);
+                int Index11 = GetArrayIndex(W + 1, H + 1);
+                float avgDepth = (FloatValues[Index00] + FloatValues[Index10] + FloatValues[Index01] + FloatValues[Index11]) / 4f;
+
+                if (Mathf.Abs(FloatValues[Index00] - avgDepth) < verticesDepthDeltaTreshold &&
+                    Mathf.Abs(FloatValues[Index10] - avgDepth) < verticesDepthDeltaTreshold
+                    && Mathf.Abs(FloatValues[Index01] - avgDepth) < verticesDepthDeltaTreshold
+                    && Mathf.Abs(FloatValues[Index11] - avgDepth) < verticesDepthDeltaTreshold)
+                {
+                    int TopLeft = Index00;
+                    int TopRight = Index00 + 1;
+                    int BotLeft = Index00 + Width;
+                    int BotRight = Index00 + 1 + Width;
+
+                    int TrinagleIndex = W + H * (Width - 1);
+                    newTriangles[TrinagleIndex * 6 + 0] = TopLeft;
+                    newTriangles[TrinagleIndex * 6 + 1] = BotLeft;
+                    newTriangles[TrinagleIndex * 6 + 2] = TopRight;
+                    newTriangles[TrinagleIndex * 6 + 3] = BotLeft;
+                    newTriangles[TrinagleIndex * 6 + 4] = BotRight;
+                    newTriangles[TrinagleIndex * 6 + 5] = TopRight;
+                }
+                else
+                {
+                    int TrinagleIndex = W + H * (Width - 1);
+                    newTriangles[TrinagleIndex * 6 + 0] = 0;
+                    newTriangles[TrinagleIndex * 6 + 1] = 0;
+                    newTriangles[TrinagleIndex * 6 + 2] = 0;
+                    newTriangles[TrinagleIndex * 6 + 3] = 0;
+                    newTriangles[TrinagleIndex * 6 + 4] = 0;
+                    newTriangles[TrinagleIndex * 6 + 5] = 0;
+                }
+            }
+        }
 
         MyMesh.vertices = newVertices;
+        MyMesh.triangles = newTriangles;
         MyMesh.RecalculateNormals();
-    }
-
-    void ProcessPixel(int i)
-    {
-        //Calc Position
-        newVertices[i].z = FloatValues[i] * MeshHeigth;
     }
 
     int GetArrayIndex(int W, int H)
