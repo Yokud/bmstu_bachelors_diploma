@@ -16,10 +16,10 @@ public class SavePhotos : MonoBehaviour
     private void Start()
     {
         Button btn = SavePanoButton.GetComponent<Button>();
-        btn.onClick.AddListener(SavePanoPhoto);
+        btn.onClick.AddListener(ReadPhotosStitchPano);
     }
 
-    public void SavePanoPhoto()
+    public void ReadPhotosStitchPano()
     {
         string path = EditorUtility.OpenFolderPanel("Select environment images", "", "png");
 

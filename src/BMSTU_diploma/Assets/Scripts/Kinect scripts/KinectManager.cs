@@ -19,10 +19,6 @@ public class KinectManager : MonoBehaviour
     // How high off the ground is the sensor (in meters).
     public float SensorHeight = 1.0f;
 
-    // Public Float to specify the image width used by depth and color maps, as % of the camera width. the height is calculated depending on the width.
-    // if percent is zero, it is calculated internally to match the selected width and height of the depth image
-    public float DisplayMapsWidthPercent = 20f;
-
     // GUI Text to show messages.
     public UnityEngine.UI.Text CalibrationText;
 

@@ -14,10 +14,10 @@ public class SavePano : MonoBehaviour
     private void Start()
     {
         Button btn = SavePanoButton.GetComponent<Button>();
-        btn.onClick.AddListener(SavePanoPhoto);
+        btn.onClick.AddListener(ReadPano);
     }
 
-    public void SavePanoPhoto()
+    public void ReadPano()
     {
         string path = EditorUtility.OpenFilePanel("Select spherical environment image", "", "png");
         if (path.Length != 0)

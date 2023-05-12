@@ -14,10 +14,10 @@ public class SaveDepthPano : MonoBehaviour
     private void Start()
     {
         Button btn = SavePanoButton.GetComponent<Button>();
-        btn.onClick.AddListener(SaveDepthPanoPhoto);
+        btn.onClick.AddListener(ReadDepthPano);
     }
 
-    public void SaveDepthPanoPhoto()
+    public void ReadDepthPano()
     {
         string path = EditorUtility.OpenFilePanel("Select spherical environment depth image", "", "png");
         if (path.Length != 0)

@@ -14,10 +14,10 @@ public class SaveDepthMaps : MonoBehaviour
     private void Start()
     {
         Button btn = SavePanoButton.GetComponent<Button>();
-        btn.onClick.AddListener(SavePanoPhoto);
+        btn.onClick.AddListener(ReadDepthMapsStitchDepthPano);
     }
 
-    public void SavePanoPhoto()
+    public void ReadDepthMapsStitchDepthPano()
     {
         string path = EditorUtility.OpenFolderPanel("Select environment depth maps", "", "");
 
