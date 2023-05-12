@@ -163,9 +163,14 @@ public class KinectManager : MonoBehaviour
         if (kinectInitialized)
         {
             // Shutdown OpenNI
-            KinectWrapper.NuiShutdown();
-            instance = null;
+            KinectShutdown();
         }
+    }
+
+    private static void KinectShutdown()
+    {
+        KinectWrapper.NuiShutdown();
+        instance = null;
     }
 
     // Start is called before the first frame update
@@ -208,6 +213,7 @@ public class KinectManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            KinectShutdown();
             SceneManager.LoadScene("Menu");
         }
     }
