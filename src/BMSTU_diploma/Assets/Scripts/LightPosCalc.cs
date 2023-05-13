@@ -98,7 +98,7 @@ public class LightPosCalc : MonoBehaviour
             for (int j = minY; j < maxY; j++)
                 if (env.SphereDepthPano.At<int>(i, j) != notValidValue)
                 {
-                    sumDepth += (env.SphereDepthPano.At<int>(i, j) - 1) / 254f;
+                    sumDepth += (env.SphereDepthPano.At<int>(i, j) - 1) / 254f * 3200 + 800;
                     validPoints++;
                 }
 

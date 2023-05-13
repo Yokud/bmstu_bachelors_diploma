@@ -1,9 +1,6 @@
-using OpenCvSharp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -18,9 +15,6 @@ public class KinectManager : MonoBehaviour
 
     // How high off the ground is the sensor (in meters).
     public float SensorHeight = 1.0f;
-
-    // GUI Text to show messages.
-    public UnityEngine.UI.Text CalibrationText;
 
     // Bool to keep track of whether Kinect has been initialized
     private bool kinectInitialized = false;
@@ -59,6 +53,8 @@ public class KinectManager : MonoBehaviour
     public float MeshHeigth;
 
     UnityEngine.UI.Image bg;
+
+    public Text CalibrationText;
 
     // returns the single KinectManager instance
     public static KinectManager Instance => instance;
@@ -118,17 +114,22 @@ public class KinectManager : MonoBehaviour
             Debug.LogError(message);
             Debug.LogError(e.ToString());
             if (CalibrationText != null)
-                CalibrationText.text = message;
-
+            {
+                CalibrationText.color = Color.red;
+                CalibrationText.text = "Status: " + message;
+            }
             return;
         }
         catch (Exception e)
         {
-            string message = e.Message + " - " + KinectWrapper.GetNuiErrorString(hr);
+            string message = "Status: " + e.Message + " - " + KinectWrapper.GetNuiErrorString(hr);
             Debug.LogError(message);
             Debug.LogError(e.ToString());
             if (CalibrationText != null)
+            {
+                CalibrationText.color = Color.red;
                 CalibrationText.text = message;
+            }
 
             return;
         }
@@ -145,7 +146,8 @@ public class KinectManager : MonoBehaviour
         // GUI Text.
         if (CalibrationText != null)
         {
-            CalibrationText.text = "Kinect initialized";
+            CalibrationText.color = Color.black;
+            CalibrationText.text = "Status: " + "Kinect initialized";
         }
 
         Debug.Log("Kinect initialized.");
@@ -163,7 +165,7 @@ public class KinectManager : MonoBehaviour
         }
     }
 
-    private static void KinectShutdown()
+    public static void KinectShutdown()
     {
         KinectWrapper.NuiShutdown();
         instance = null;
