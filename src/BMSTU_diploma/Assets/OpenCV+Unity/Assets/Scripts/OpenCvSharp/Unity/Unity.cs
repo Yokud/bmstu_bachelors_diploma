@@ -88,7 +88,7 @@ namespace OpenCvSharp {
 			if (null == parameters)
 				parameters = TextureConversionParams.Default;
 
-			Color32[] pixels32 = texture.GetPixels32 ();
+			Color32[] pixels32 = texture.GetPixels32();
 			return PixelsToMat(pixels32, texture.width, texture.height, parameters.FlipVertically, parameters.FlipHorizontally, parameters.RotationAngle);
 		}
 

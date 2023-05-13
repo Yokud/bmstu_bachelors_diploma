@@ -11,7 +11,7 @@ public class LightPosCalc : MonoBehaviour
 {
     const double MinPixelsCoveragePercent = 0.98;
 
-    public int MedianBlurWindow = 7;
+    public int MedianBlurWindow = 35;
     public Button StartButton;
     public GameObject EnvironmentData;
 
@@ -59,6 +59,13 @@ public class LightPosCalc : MonoBehaviour
 
         Cv2.FindContours(filtered, out Point[][] contours, out HierarchyIndex[] hierarchy, RetrievalModes.Tree, ContourApproximationModes.ApproxSimple);
 
+        //var contoursImage = Mat.Zeros(filtered.Size(), filtered.Type()).ToMat();
+        //for (int i = 0; i < contours.Length; i++)
+        //{
+        //    Cv2.DrawContours(contoursImage, contours, i, Scalar.White, 1, hierarchy: hierarchy, maxLevel: 0);
+        //}
+        //SavePng(contoursImage, @"D:\testContours.png");
+
         var moments = new Moments[contours.Length];
         var centroids = new Point[contours.Length];
         var radiuses = new float[contours.Length];
@@ -73,8 +80,16 @@ public class LightPosCalc : MonoBehaviour
         var decartCoords = new Vector3[centroids.Length];
         for (int i = 0; i < centroids.Length; i++)
         {
-            polarCoords[i] = new Vector3(2 * Mathf.PI * centroids[i].X / spherePanoWidth, Mathf.PI * (spherePanoHeight - centroids[i].Y) / spherePanoHeight, radiuses[i]);
-            decartCoords[i] = new Vector3(polarCoords[i].z * Mathf.Sin(polarCoords[i].x) * Mathf.Cos(polarCoords[i].y), polarCoords[i].z * Mathf.Sin(polarCoords[i].x) * Mathf.Sin(polarCoords[i].y), polarCoords[i].z * Mathf.Cos(polarCoords[i].y));
+            polarCoords[i] = new Vector3(radiuses[i], 2 * Mathf.PI * centroids[i].X / spherePanoWidth, Mathf.PI * (spherePanoHeight - centroids[i].Y) / spherePanoHeight);
+            decartCoords[i] = new Vector3(polarCoords[i].x * Mathf.Sin(polarCoords[i].y) * Mathf.Cos(polarCoords[i].z), polarCoords[i].x * Mathf.Sin(polarCoords[i].y) * Mathf.Sin(polarCoords[i].z), polarCoords[i].x * Mathf.Cos(polarCoords[i].z));
+        }
+
+        decartCoords = decartCoords.Where(p => float.IsFinite(p.x) && float.IsFinite(p.y) && float.IsFinite(p.z)).ToArray();
+
+        if (!decartCoords.Any())
+        {
+            Debug.Log("Can't find any light source");
+            return;
         }
 
         EnvDataFields.LightCoords = decartCoords.ToList();
@@ -96,13 +111,14 @@ public class LightPosCalc : MonoBehaviour
             for (int j = minY; j < maxY; j++)
                 if (env.SphereDepthPano.At<int>(i, j) != notValidValue)
                 {
-                    sumDepth += (env.SphereDepthPano.At<int>(i, j) - 1) / 254f * 3200f + 800f;
+                    sumDepth += ((float)env.SphereDepthPano.At<Vec3b>(i, j)[0] - 1) / 254f * 3200f + 800f;
                     validPoints++;
                 }
 
         return sumDepth / validPoints;
     }
 
+    // Debug images method
     void SavePng(Mat image, string filename)
     {
         var tex = OpenCvSharp.Unity.MatToTexture(image);
