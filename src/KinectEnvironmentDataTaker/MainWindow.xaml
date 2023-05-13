@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KinectEnvironmentDataTaker"
         mc:Ignorable="d"
-        Title="KinectEnvironmentDatataker" Height="735" Width="1600" Loaded="Window_Loaded" Closing="Window_Closing">
+        Title="KinectEnvironmentDatataker" Height="735" Width="1600" Loaded="Window_Loaded" Closing="Window_Closing" KeyDown="Window_KeyDown">
     
     <Window.Resources>
         <SolidColorBrush x:Key="MediumGreyBrush" Color="#ff6e6e6e"/>

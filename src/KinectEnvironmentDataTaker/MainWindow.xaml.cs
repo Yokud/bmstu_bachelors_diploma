@@ -219,6 +219,11 @@ namespace KinectEnvironmentDataTaker
                 return;
             }
 
+            SaveData();
+        }
+
+        private void SaveData()
+        {
             BitmapEncoder colorEncoder = new PngBitmapEncoder();
             colorEncoder.Frames.Add(BitmapFrame.Create(colorBitmap));
 
@@ -246,6 +251,20 @@ namespace KinectEnvironmentDataTaker
             catch (IOException)
             {
                 statusBarText.Text = string.Format(CultureInfo.InvariantCulture, "{0} {1}", Properties.Resources.ScreenshotWriteFailed, colorPath + " and " + depthPath);
+            }
+        }
+
+        private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Space)
+            {
+                if (null == sensor)
+                {
+                    statusBarText.Text = Properties.Resources.ConnectDeviceFirst;
+                    return;
+                }
+
+                SaveData();
             }
         }
     }
