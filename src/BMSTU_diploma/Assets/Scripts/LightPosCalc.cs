@@ -14,7 +14,6 @@ public class LightPosCalc : MonoBehaviour
     public int MedianBlurWindow = 7;
     public Button StartButton;
     public GameObject EnvironmentData;
-    public GameObject LightCoordsReceiver;
 
     private void Start()
     {
@@ -78,8 +77,7 @@ public class LightPosCalc : MonoBehaviour
             decartCoords[i] = new Vector3(polarCoords[i].z * Mathf.Sin(polarCoords[i].x) * Mathf.Cos(polarCoords[i].y), polarCoords[i].z * Mathf.Sin(polarCoords[i].x) * Mathf.Sin(polarCoords[i].y), polarCoords[i].z * Mathf.Cos(polarCoords[i].y));
         }
 
-        var ds = LightCoordsReceiver.GetComponent<DataStorageInfo>();
-        ds.LightCoords = decartCoords.ToList();
+        EnvDataFields.LightCoords = decartCoords.ToList();
 
         SceneManager.LoadScene("ARScene");
     }
@@ -98,7 +96,7 @@ public class LightPosCalc : MonoBehaviour
             for (int j = minY; j < maxY; j++)
                 if (env.SphereDepthPano.At<int>(i, j) != notValidValue)
                 {
-                    sumDepth += (env.SphereDepthPano.At<int>(i, j) - 1) / 254f * 3200 + 800;
+                    sumDepth += (env.SphereDepthPano.At<int>(i, j) - 1) / 254f * 3200f + 800f;
                     validPoints++;
                 }
 

@@ -6,4 +6,6 @@ using UnityEngine;
 public class EnvDataFields : MonoBehaviour
 {
     public Mat SpherePano, SphereDepthPano;
+
+    public static List<Vector3> LightCoords;
 }

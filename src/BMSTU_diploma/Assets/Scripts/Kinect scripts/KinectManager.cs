@@ -59,7 +59,7 @@ public class KinectManager : MonoBehaviour
     // returns the single KinectManager instance
     public static KinectManager Instance => instance;
 
-    public bool KinectInitialized => kinectInitialized;
+    public static bool IsKinectInitialized() => instance != null ? instance.kinectInitialized : false;
 
     void Awake()
     {
@@ -158,17 +158,17 @@ public class KinectManager : MonoBehaviour
     // Make sure to kill the Kinect on quitting.
     void OnApplicationQuit()
     {
-        if (kinectInitialized)
-        {
-            // Shutdown OpenNI
-            KinectShutdown();
-        }
+        KinectShutdown();
     }
 
     public static void KinectShutdown()
     {
-        KinectWrapper.NuiShutdown();
-        instance = null;
+        if (IsKinectInitialized())
+        {
+            KinectWrapper.NuiShutdown();
+            instance.kinectInitialized = false;
+            instance = null;
+        }
     }
 
     // Start is called before the first frame update
@@ -207,12 +207,6 @@ public class KinectManager : MonoBehaviour
                 if (bg != null)
                     bg.sprite = Sprite.Create(ColorTexture, new UnityEngine.Rect(0 ,0, Width, Height), new Vector2());
             }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            KinectShutdown();
-            SceneManager.LoadScene("Menu");
         }
     }
 
