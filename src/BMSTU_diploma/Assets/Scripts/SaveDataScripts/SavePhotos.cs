@@ -44,5 +44,7 @@ public class SavePhotos : MonoBehaviour
 
         var env = PanoReceiver.GetComponent<EnvDataFields>();
         env.SpherePano = pano;
+
+        //LightPosCalc.SavePng(pano, "D:\\colorPano.png");
     }
 }

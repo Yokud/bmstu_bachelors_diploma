@@ -80,7 +80,7 @@ public class LightPosCalc : MonoBehaviour
         var decartCoords = new Vector3[centroids.Length];
         for (int i = 0; i < centroids.Length; i++)
         {
-            polarCoords[i] = new Vector3(radiuses[i], 2 * Mathf.PI * centroids[i].X / spherePanoWidth, Mathf.PI * (spherePanoHeight - centroids[i].Y) / spherePanoHeight);
+            polarCoords[i] = new Vector3(radiuses[i], 2 * Mathf.PI * centroids[i].X / spherePanoWidth, Mathf.PI * (spherePanoHeight - centroids[i].Y) / spherePanoHeight); // PHI = 2 * PI * (spherePanoHeight / 2 - centroids[i].Y) / spherePanoHeight
             decartCoords[i] = new Vector3(polarCoords[i].x * Mathf.Sin(polarCoords[i].y) * Mathf.Cos(polarCoords[i].z), polarCoords[i].x * Mathf.Sin(polarCoords[i].y) * Mathf.Sin(polarCoords[i].z), polarCoords[i].x * Mathf.Cos(polarCoords[i].z));
         }
 
@@ -119,7 +119,7 @@ public class LightPosCalc : MonoBehaviour
     }
 
     // Debug images method
-    void SavePng(Mat image, string filename)
+    public static void SavePng(Mat image, string filename)
     {
         var tex = OpenCvSharp.Unity.MatToTexture(image);
         var bytes = tex.EncodeToPNG();

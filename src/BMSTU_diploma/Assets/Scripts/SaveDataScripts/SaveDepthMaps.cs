@@ -43,5 +43,7 @@ public class SaveDepthMaps : MonoBehaviour
 
         var env = PanoReceiver.GetComponent<EnvDataFields>();
         env.SpherePano = pano;
+
+        //LightPosCalc.SavePng(pano, "D:\\depthPano.png");
     }
 }
