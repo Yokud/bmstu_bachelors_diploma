@@ -80,7 +80,7 @@ public class LightPosCalc : MonoBehaviour
         var decartCoords = new Vector3[centroids.Length];
         for (int i = 0; i < centroids.Length; i++)
         {
-            polarCoords[i] = new Vector3(radiuses[i], 2 * Mathf.PI * centroids[i].X / spherePanoWidth, Mathf.PI * (spherePanoHeight - centroids[i].Y) / spherePanoHeight); // PHI = 2 * PI * (spherePanoHeight / 2 - centroids[i].Y) / spherePanoHeight
+            polarCoords[i] = new Vector3(radiuses[i], 2 * Mathf.PI * centroids[i].X / spherePanoWidth, Mathf.PI * (spherePanoHeight / 2 - centroids[i].Y) / spherePanoHeight); // PHI = PI * (spherePanoHeight / 2 - centroids[i].Y) / spherePanoHeight
             decartCoords[i] = new Vector3(polarCoords[i].x * Mathf.Sin(polarCoords[i].y) * Mathf.Cos(polarCoords[i].z), polarCoords[i].x * Mathf.Sin(polarCoords[i].y) * Mathf.Sin(polarCoords[i].z), polarCoords[i].x * Mathf.Cos(polarCoords[i].z));
         }
 
@@ -111,7 +111,7 @@ public class LightPosCalc : MonoBehaviour
             for (int j = minY; j < maxY; j++)
                 if (env.SphereDepthPano.At<int>(i, j) != notValidValue)
                 {
-                    sumDepth += ((float)env.SphereDepthPano.At<Vec3b>(i, j)[0] - 1) / 254f * 3200f + 800f;
+                    sumDepth += ((float)env.SphereDepthPano.At<Vec3b>(i, j)[0] - 1) / 254f * 320f + 80f;
                     validPoints++;
                 }
 

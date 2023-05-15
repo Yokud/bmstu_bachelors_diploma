@@ -223,7 +223,7 @@ public class KinectManager : MonoBehaviour
             for (int W = 0; W < Width; W++)
             {
                 int Index = GetArrayIndex(W, H);
-                newVertices[Index] = new Vector3(W, H, 0f);
+                newVertices[Index] = new Vector3((W / (float)Width - 0.5f) * Width, (H / (float)Height - 0.5f) * Height, 0f);
                 newNormals[Index] = new Vector3(0, 0, 1);
 
                 if ((W != (Width - 1)) && (H != (Height - 1)))
