@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18029079, g: 0.22572261, b: 0.3069269, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -481,7 +481,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &395868702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -672,15 +672,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3783852227132099792, guid: 88cc575159bf28e4294058e166d9a18c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -70
+      value: 48
       objectReference: {fileID: 0}
     - target: {fileID: 3783852227132099792, guid: 88cc575159bf28e4294058e166d9a18c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 141
+      value: -25
       objectReference: {fileID: 0}
     - target: {fileID: 3783852227132099792, guid: 88cc575159bf28e4294058e166d9a18c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -111
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 3783852227132099792, guid: 88cc575159bf28e4294058e166d9a18c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -716,11 +716,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5963006272793258224, guid: 88cc575159bf28e4294058e166d9a18c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6631466265157997366, guid: 88cc575159bf28e4294058e166d9a18c, type: 3}
+      propertyPath: m_Range
+      value: 10000
       objectReference: {fileID: 0}
     - target: {fileID: 6631466265157997366, guid: 88cc575159bf28e4294058e166d9a18c, type: 3}
       propertyPath: m_Intensity
-      value: 100
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 6631466265157997366, guid: 88cc575159bf28e4294058e166d9a18c, type: 3}
       propertyPath: m_Lightmapping
