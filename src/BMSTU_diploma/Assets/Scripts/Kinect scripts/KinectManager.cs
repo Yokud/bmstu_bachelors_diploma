@@ -185,6 +185,10 @@ public class KinectManager : MonoBehaviour
 
         cam = Camera.main;
 
+        GetFrustumParams(Background.transform.position.z, out float bgHeight, out float bgWidth);
+        var rt = Background.GetComponent(typeof(RectTransform)) as RectTransform;
+        rt.sizeDelta = new Vector2(bgWidth, bgHeight);
+
         SetupArrays();
     }
 
@@ -221,8 +225,7 @@ public class KinectManager : MonoBehaviour
         newTriangles = new int[(Width - 1) * (Height - 1) * 6];
 
         var distance = PlaneGrid.transform.position.z;
-        var frustumHeight = 2.0f * distance * Mathf.Tan(cam.fieldOfView * 0.5f * Mathf.Deg2Rad);
-        var frustumWidth = frustumHeight * cam.aspect;
+        GetFrustumParams(distance, out float frustumHeight, out float frustumWidth);
 
         for (int H = 0; H < Height; H++)
         {
@@ -254,6 +257,12 @@ public class KinectManager : MonoBehaviour
         MyMesh.vertices = newVertices;
         MyMesh.normals = newNormals;
         MyMesh.triangles = newTriangles;
+    }
+
+    private void GetFrustumParams(float distance, out float frustumHeight, out float frustumWidth)
+    {
+        frustumHeight = 2.0f * distance * Mathf.Tan(cam.fieldOfView * 0.5f * Mathf.Deg2Rad);
+        frustumWidth = frustumHeight * cam.aspect;
     }
 
     void CalculateFloatValues()
