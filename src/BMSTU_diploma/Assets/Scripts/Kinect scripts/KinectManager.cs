@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class KinectManager : MonoBehaviour
@@ -216,18 +215,21 @@ public class KinectManager : MonoBehaviour
 
     void SetupArrays()
     {
-        //filteredDepthMap = new ushort[Width * Height];
         FloatValues = new float[Width * Height];
         newVertices = new Vector3[Width * Height];
         newNormals = new Vector3[Width * Height];
         newTriangles = new int[(Width - 1) * (Height - 1) * 6];
+
+        var distance = PlaneGrid.transform.position.z;
+        var frustumHeight = 2.0f * distance * Mathf.Tan(cam.fieldOfView * 0.5f * Mathf.Deg2Rad);
+        var frustumWidth = frustumHeight * cam.aspect;
 
         for (int H = 0; H < Height; H++)
         {
             for (int W = 0; W < Width; W++)
             {
                 int Index = GetArrayIndex(W, H);
-                newVertices[Index] = new Vector3(W - Width / 2, H - Height / 2, 0f);
+                newVertices[Index] = new Vector3((W / (Width - 1f) - 0.5f) * frustumWidth, (H / (Height - 1f) - 0.5f) * frustumHeight, 0f);
                 newNormals[Index] = new Vector3(0, 0, 1);
 
                 if ((W != (Width - 1)) && (H != (Height - 1)))
@@ -253,17 +255,6 @@ public class KinectManager : MonoBehaviour
         MyMesh.normals = newNormals;
         MyMesh.triangles = newTriangles;
     }
-
-    //void FilterDepthMap()
-    //{
-    //    Mat depthMat = new Mat(Width, Height, MatType.CV_16U, depthMap);
-
-    //    Mat filteredMat = new Mat();
-    //    Cv2.GaussianBlur(depthMat, filteredMat, new Size(11, 11), 4, 4);
-
-    //    filteredMat.GetArray(0, 0, filteredDepthMap);
-    //    //depthMat.GetArray(0, 0, filteredDepthMap);
-    //}
 
     void CalculateFloatValues()
     {
