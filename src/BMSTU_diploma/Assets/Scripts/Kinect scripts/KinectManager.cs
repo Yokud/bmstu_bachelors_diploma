@@ -234,7 +234,7 @@ public class KinectManager : MonoBehaviour
             {
                 int Index = GetArrayIndex(W, H);
                 newVertices[Index] = new Vector3((W / (Width - 1f) - 0.5f) * frustumWidth, (H / (Height - 1f) - 0.5f) * frustumHeight, 0f);
-                newNormals[Index] = new Vector3(0, 0, 1);
+                newNormals[Index] = new Vector3(0, 0, -1);
 
                 if ((W != (Width - 1)) && (H != (Height - 1)))
                 {
