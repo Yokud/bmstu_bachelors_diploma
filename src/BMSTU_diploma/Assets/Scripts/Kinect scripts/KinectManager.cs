@@ -22,6 +22,8 @@ public class KinectManager : MonoBehaviour
     Matrix4x4 kinectToWorld, flipMatrix;
     static KinectManager instance;
 
+    Camera cam;
+
     // Image stream handles for the kinect
     private IntPtr colorStreamHandle;
     private IntPtr depthStreamHandle;
@@ -182,6 +184,8 @@ public class KinectManager : MonoBehaviour
 
         bg = Background.GetComponentInChildren<UnityEngine.UI.Image>();
 
+        cam = Camera.main;
+
         SetupArrays();
     }
 
@@ -223,7 +227,7 @@ public class KinectManager : MonoBehaviour
             for (int W = 0; W < Width; W++)
             {
                 int Index = GetArrayIndex(W, H);
-                newVertices[Index] = new Vector3((W / (float)Width - 0.5f) * Width, (H / (float)Height - 0.5f) * Height, 0f);
+                newVertices[Index] = new Vector3(W - Width / 2, H - Height / 2, 0f);
                 newNormals[Index] = new Vector3(0, 0, 1);
 
                 if ((W != (Width - 1)) && (H != (Height - 1)))
