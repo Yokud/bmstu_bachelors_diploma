@@ -35,7 +35,6 @@ public class KinectManager : MonoBehaviour
     // Color data
     private Texture2D ColorTexture;
     private Color32[] colorImage;
-    private UnityEngine.Rect colorRect;
     private byte[] colorMap;
 
     // Mesh info
@@ -53,14 +52,14 @@ public class KinectManager : MonoBehaviour
     int MaxDepthValue = KinectWrapper.GetMaxDepth();
     public float MeshHeigth;
 
-    UnityEngine.UI.Image bg;
+    Image bg;
 
     public Text CalibrationText;
 
     // returns the single KinectManager instance
     public static KinectManager Instance => instance;
 
-    public static bool IsKinectInitialized() => instance != null ? instance.kinectInitialized : false;
+    public static bool IsKinectInitialized() => instance != null && instance.kinectInitialized;
 
     void Awake()
     {
@@ -95,8 +94,10 @@ public class KinectManager : MonoBehaviour
             KinectWrapper.NuiCameraElevationSetAngle(SensorAngle);
 
             //create the transform matrix that converts from kinect-space to world-space
-            Quaternion quatTiltAngle = new Quaternion();
-            quatTiltAngle.eulerAngles = new Vector3(-SensorAngle, 0.0f, 0.0f);
+            var quatTiltAngle = new Quaternion
+            {
+                eulerAngles = new Vector3(-SensorAngle, 0.0f, 0.0f)
+            };
 
             //float heightAboveHips = SensorHeight - 1.0f;
 
@@ -181,12 +182,12 @@ public class KinectManager : MonoBehaviour
         };
         PlaneGrid.GetComponent<MeshFilter>().mesh = MyMesh;
 
-        bg = Background.GetComponentInChildren<UnityEngine.UI.Image>();
+        bg = Background.GetComponentInChildren<Image>();
 
         cam = Camera.main;
 
         GetFrustumParams(Background.transform.position.z, out float bgHeight, out float bgWidth);
-        var rt = Background.GetComponent(typeof(RectTransform)) as RectTransform;
+        var rt = Background.GetComponent<RectTransform>();
         rt.sizeDelta = new Vector2(bgWidth, bgHeight);
 
         SetupArrays();
