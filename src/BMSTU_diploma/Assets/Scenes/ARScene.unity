@@ -735,11 +735,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6631466265157997366, guid: 88cc575159bf28e4294058e166d9a18c, type: 3}
       propertyPath: m_Range
-      value: 10000
+      value: 5000
       objectReference: {fileID: 0}
     - target: {fileID: 6631466265157997366, guid: 88cc575159bf28e4294058e166d9a18c, type: 3}
       propertyPath: m_Intensity
-      value: 1000
+      value: 7500
       objectReference: {fileID: 0}
     - target: {fileID: 6631466265157997366, guid: 88cc575159bf28e4294058e166d9a18c, type: 3}
       propertyPath: m_Lightmapping
