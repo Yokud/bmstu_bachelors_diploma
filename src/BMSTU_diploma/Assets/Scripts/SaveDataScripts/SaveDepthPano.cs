@@ -19,7 +19,7 @@ public class SaveDepthPano : MonoBehaviour
 
     public void ReadDepthPano()
     {
-        string path = EditorUtility.OpenFilePanel("Select spherical environment depth image", "", "png");
+        string path = EditorUtility.OpenFilePanel("Select spherical environment depth image", "", "tif");
         if (path.Length != 0)
         {
             byte[] fileData = File.ReadAllBytes(path);
