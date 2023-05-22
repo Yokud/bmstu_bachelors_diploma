@@ -42,7 +42,6 @@ public class KinectManager : MonoBehaviour
     Vector3[] newNormals;
     int[] newTriangles;
     Mesh MyMesh;
-    //ushort[] filteredDepthMap;
     float[] FloatValues;
     float verticesDepthDeltaTreshold = 0.15f;
 
@@ -63,7 +62,6 @@ public class KinectManager : MonoBehaviour
 
     void Awake()
     {
-        //CalibrationText = GameObject.Find("CalibrationText");
         int hr = 0;
 
         try
@@ -89,23 +87,6 @@ public class KinectManager : MonoBehaviour
             {
                 throw new Exception("Cannot open color stream");
             }
-
-            // set kinect elevation angle
-            //KinectWrapper.NuiCameraElevationSetAngle(SensorAngle);
-
-            //create the transform matrix that converts from kinect-space to world-space
-            //var quatTiltAngle = new Quaternion
-            //{
-            //    eulerAngles = new Vector3(-SensorAngle, 0.0f, 0.0f)
-            //};
-
-            ////float heightAboveHips = SensorHeight - 1.0f;
-
-            //// transform matrix - kinect to world
-            ////kinectToWorld.SetTRS(new Vector3(0.0f, heightAboveHips, 0.0f), quatTiltAngle, Vector3.one);
-            //kinectToWorld.SetTRS(new Vector3(0.0f, SensorHeight, 0.0f), quatTiltAngle, Vector3.one);
-            //flipMatrix = Matrix4x4.identity;
-            //flipMatrix[2, 2] = -1;
 
             instance = this;
             DontDestroyOnLoad(gameObject);
@@ -198,13 +179,8 @@ public class KinectManager : MonoBehaviour
     {
         if (kinectInitialized)
         {
-            // needed by the KinectExtras' native wrapper to check for next frames
-            // uncomment the line below, if you use the Extras' wrapper, but none of the Extras' managers
-            //KinectWrapper.UpdateKinectSensor();
-
             if (depthStreamHandle != IntPtr.Zero && KinectWrapper.PollDepth(depthStreamHandle, KinectWrapper.Constants.IsNearMode, ref depthMap))
             {
-                //FilterDepthMap();
                 CalculateFloatValues();
                 UpdateMesh();
             }
@@ -226,15 +202,13 @@ public class KinectManager : MonoBehaviour
         newNormals = new Vector3[Width * Height];
         newTriangles = new int[(Width - 1) * (Height - 1) * 6];
 
-        var distance = PlaneGrid.transform.position.z;
-        GetFrustumParams(distance, out float frustumHeight, out float frustumWidth);
-
         for (int H = 0; H < Height; H++)
         {
             for (int W = 0; W < Width; W++)
             {
                 int Index = GetArrayIndex(W, H);
-                newVertices[Index] = new Vector3((W / (Width - 1f) - 0.5f) * frustumWidth, (H / (Height - 1f) - 0.5f) * frustumHeight, 0f);
+                newVertices[Index] = cam.ScreenToWorldPoint(new Vector3(W, H, PlaneGrid.transform.position.z));
+                newVertices[Index].z -= PlaneGrid.transform.position.z;
                 newNormals[Index] = new Vector3(0, 0, -1);
 
                 if ((W != (Width - 1)) && (H != (Height - 1)))
