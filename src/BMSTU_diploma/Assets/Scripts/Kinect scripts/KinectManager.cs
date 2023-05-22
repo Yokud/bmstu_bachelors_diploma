@@ -284,12 +284,18 @@ public class KinectManager : MonoBehaviour
 
     void UpdateMesh()
     {
-        for (int H = 0; H < Height - 1; H++)
+        for (int H = 0; H < Height; H++)
         {
-            for (int W = 0; W < Width - 1; W++)
+            for (int W = 0; W < Width; W++)
             {
                 int Index00 = GetArrayIndex(W, H);
-                newVertices[Index00].z = FloatValues[Index00] * MeshHeigth;
+
+                var tmp = cam.ScreenToWorldPoint(new Vector3(W, H, FloatValues[Index00] * MeshHeigth + PlaneGrid.transform.position.z));
+                tmp.z -= PlaneGrid.transform.position.z;
+                newVertices[Index00] = tmp;
+
+                if (H == Height - 1 || W == Width - 1)
+                    continue;
 
                 int Index10 = GetArrayIndex(W + 1, H);
                 int Index01 = GetArrayIndex(W, H + 1);
