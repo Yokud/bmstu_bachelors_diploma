@@ -290,9 +290,7 @@ public class KinectManager : MonoBehaviour
             {
                 int Index00 = GetArrayIndex(W, H);
 
-                var tmp = cam.ScreenToWorldPoint(new Vector3(W, H, FloatValues[Index00] * MeshHeigth + PlaneGrid.transform.position.z));
-                tmp.z -= PlaneGrid.transform.position.z;
-                newVertices[Index00] = tmp;
+                newVertices[Index00] = cam.ScreenToWorldPoint(new Vector3(W, H, FloatValues[Index00] * MeshHeigth + PlaneGrid.transform.position.z)) - new Vector3(0, 0, PlaneGrid.transform.position.z);
 
                 if (H == Height - 1 || W == Width - 1)
                     continue;
