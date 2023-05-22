@@ -18,7 +18,7 @@ public class KinectManager : MonoBehaviour
     // Bool to keep track of whether Kinect has been initialized
     private bool kinectInitialized = false;
 
-    Matrix4x4 kinectToWorld, flipMatrix;
+    //Matrix4x4 kinectToWorld, flipMatrix;
     static KinectManager instance;
 
     Camera cam;
@@ -91,21 +91,21 @@ public class KinectManager : MonoBehaviour
             }
 
             // set kinect elevation angle
-            KinectWrapper.NuiCameraElevationSetAngle(SensorAngle);
+            //KinectWrapper.NuiCameraElevationSetAngle(SensorAngle);
 
             //create the transform matrix that converts from kinect-space to world-space
-            var quatTiltAngle = new Quaternion
-            {
-                eulerAngles = new Vector3(-SensorAngle, 0.0f, 0.0f)
-            };
+            //var quatTiltAngle = new Quaternion
+            //{
+            //    eulerAngles = new Vector3(-SensorAngle, 0.0f, 0.0f)
+            //};
 
-            //float heightAboveHips = SensorHeight - 1.0f;
+            ////float heightAboveHips = SensorHeight - 1.0f;
 
-            // transform matrix - kinect to world
-            //kinectToWorld.SetTRS(new Vector3(0.0f, heightAboveHips, 0.0f), quatTiltAngle, Vector3.one);
-            kinectToWorld.SetTRS(new Vector3(0.0f, SensorHeight, 0.0f), quatTiltAngle, Vector3.one);
-            flipMatrix = Matrix4x4.identity;
-            flipMatrix[2, 2] = -1;
+            //// transform matrix - kinect to world
+            ////kinectToWorld.SetTRS(new Vector3(0.0f, heightAboveHips, 0.0f), quatTiltAngle, Vector3.one);
+            //kinectToWorld.SetTRS(new Vector3(0.0f, SensorHeight, 0.0f), quatTiltAngle, Vector3.one);
+            //flipMatrix = Matrix4x4.identity;
+            //flipMatrix[2, 2] = -1;
 
             instance = this;
             DontDestroyOnLoad(gameObject);
@@ -213,7 +213,8 @@ public class KinectManager : MonoBehaviour
             {
                 UpdateColorMap();
                 if (bg != null)
-                    bg.sprite = Sprite.Create(ColorTexture, new UnityEngine.Rect(0 ,0, Width, Height), new Vector2());
+                    bg.sprite = Sprite.Create(ColorTexture, new Rect(0 ,0, Width, Height), new Vector2());
+                UpdateCameraOrientation();
             }
         }
     }
@@ -346,5 +347,10 @@ public class KinectManager : MonoBehaviour
     {
         ColorTexture.SetPixels32(colorImage);
         ColorTexture.Apply();
+    }
+
+    void UpdateCameraOrientation()
+    {
+
     }
 }

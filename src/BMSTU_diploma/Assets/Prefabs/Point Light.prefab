@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 886421843}
   m_Layer: 0
   m_Name: Point Light
-  m_TagString: Untagged
+  m_TagString: LightSource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

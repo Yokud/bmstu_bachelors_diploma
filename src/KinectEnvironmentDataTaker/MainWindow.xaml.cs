@@ -87,10 +87,10 @@ namespace KinectEnvironmentDataTaker
                 depthPixels = new DepthImagePixel[sensor.DepthStream.FramePixelDataLength];
 
                 // Allocate space to put the color pixels we'll create
-                coloredDepthPixels = new short[sensor.DepthStream.FramePixelDataLength];
+                coloredDepthPixels = new short[sensor.DepthStream.FramePixelDataLength * 6];
 
                 // This is the bitmap we'll display on-screen
-                coloredDepthBitmap = new WriteableBitmap(sensor.DepthStream.FrameWidth, sensor.DepthStream.FrameHeight, 96.0, 96.0, PixelFormats.Gray16, null);
+                coloredDepthBitmap = new WriteableBitmap(sensor.DepthStream.FrameWidth, sensor.DepthStream.FrameHeight, 96.0, 96.0, PixelFormats.Rgb48, null);
 
                 // Set the image we display to point to the bitmap where we'll put the image data
                 ImageDepth.Source = coloredDepthBitmap;
@@ -182,14 +182,14 @@ namespace KinectEnvironmentDataTaker
                         // for a lookup table example.
                         short intensity = depth >= minDepth && depth <= maxDepth ? depth : (short)0;
 
-                        // Write out blue byte
+                        // Write out red byte
                         coloredDepthPixels[colorPixelIndex++] = intensity;
 
-                        //// Write out green byte
-                        //coloredDepthPixels[colorPixelIndex++] = intensity;
+                        // Write out green byte
+                        coloredDepthPixels[colorPixelIndex++] = intensity;
 
-                        //// Write out red byte                        
-                        //coloredDepthPixels[colorPixelIndex++] = intensity;
+                        // Write out blue byte                        
+                        coloredDepthPixels[colorPixelIndex++] = intensity;
 
                         //// We're outputting BGR, the last byte in the 32 bits is unused so skip it
                         //// If we were outputting BGRA, we would write alpha here.
@@ -200,7 +200,7 @@ namespace KinectEnvironmentDataTaker
                     coloredDepthBitmap.WritePixels(
                         new Int32Rect(0, 0, coloredDepthBitmap.PixelWidth, coloredDepthBitmap.PixelHeight),
                         coloredDepthPixels,
-                        coloredDepthBitmap.PixelWidth * sizeof(short),
+                        coloredDepthBitmap.PixelWidth * 6,
                         0);
                 }
             }
@@ -227,7 +227,7 @@ namespace KinectEnvironmentDataTaker
             BitmapEncoder colorEncoder = new PngBitmapEncoder();
             colorEncoder.Frames.Add(BitmapFrame.Create(colorBitmap));
 
-            BitmapEncoder depthEncoder = new TiffBitmapEncoder();
+            BitmapEncoder depthEncoder = new PngBitmapEncoder();
             depthEncoder.Frames.Add(BitmapFrame.Create(coloredDepthBitmap));
 
             string time = DateTime.Now.ToString("hh'-'mm'-'ss", CultureInfo.CurrentUICulture.DateTimeFormat);
@@ -235,7 +235,7 @@ namespace KinectEnvironmentDataTaker
             string myPhotos = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
 
             string colorPath = Path.Combine(myPhotos, "EnvironmentData-" + time + "-color" + ".png");
-            string depthPath = Path.Combine(myPhotos, "EnvironmentData-" + time + "-depth" + ".tif");
+            string depthPath = Path.Combine(myPhotos, "EnvironmentData-" + time + "-depth" + ".png");
 
             // write the new file to disk
             try

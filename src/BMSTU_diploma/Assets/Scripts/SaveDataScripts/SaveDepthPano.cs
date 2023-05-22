@@ -2,8 +2,11 @@ using OpenCvSharp;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class SaveDepthPano : MonoBehaviour
@@ -19,13 +22,24 @@ public class SaveDepthPano : MonoBehaviour
 
     public void ReadDepthPano()
     {
-        string path = EditorUtility.OpenFilePanel("Select spherical environment depth image", "", "tif");
+        string path = EditorUtility.OpenFilePanel("Select spherical environment depth image", "", "png");
         if (path.Length != 0)
         {
             byte[] fileData = File.ReadAllBytes(path);
-            var tex = new Texture2D(2, 2);
+            var tex = new Texture2D(2, 2, TextureFormat.RGB48, false);
             tex.LoadImage(fileData);
-            var fileContent = OpenCvSharp.Unity.TextureToMat(tex);
+
+            Color[] pixels = tex.GetPixels();
+
+            var rgbPixels = new short[pixels.Length * 3];
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                rgbPixels[i] = (short)(pixels[i].r * 65535);
+                rgbPixels[i + 1] = (short)(pixels[i].g * 65535);
+                rgbPixels[i + 2] = (short)(pixels[i].b * 65535);
+            }
+
+            var fileContent = new Mat(tex.height, tex.width, MatType.CV_16UC3, rgbPixels);
 
             var env = PanoReceiver.GetComponent<EnvDataFields>();
             env.SphereDepthPano = fileContent;
