@@ -110,7 +110,7 @@ public class LightPosCalc : MonoBehaviour
         for (int i = minX; i < maxX; i++)
             for (int j = minY; j < maxY; j++)
             {
-                var val = env.SphereDepthPano.At<Vec3s>(i, j)[0] / 10f; // mm -> cm
+                var val = env.SphereDepthPano.Get<Vec3w>(i, j)[0] / 10f; // mm -> cm
                 if (val != notValidValue)
                 {
                     sumDepth += val;
