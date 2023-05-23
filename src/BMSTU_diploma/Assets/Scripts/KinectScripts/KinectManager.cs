@@ -315,7 +315,14 @@ public class KinectManager : MonoBehaviour
         MyMesh.RecalculateNormals();
     }
 
-    public Vector3 ManualScreenToWorldPoint(Vector2 screenPoint, float distance, Matrix4x4 matrix)
+    /// <summary>
+    /// Manual version of camera.ScreenToWorldPoint
+    /// </summary>
+    /// <param name="screenPoint">X and Y coords</param>
+    /// <param name="distance">Z coord</param>
+    /// <param name="cameraToWorldMatrixProjectionMatrixInverse">camera.cameraToWorldMatrix * camera.projectionMatrix.inverse</param>
+    /// <returns></returns>
+    public Vector3 ManualScreenToWorldPoint(Vector2 screenPoint, float distance, Matrix4x4 cameraToWorldMatrixProjectionMatrixInverse)
     {
         // here we are converting screen point in screen space to camera space point placed on a plane "distance" away from the camera
         // screen point is in range [(0,0) - (Screen.Width, Screen.Height)]
@@ -327,7 +334,7 @@ public class KinectManager : MonoBehaviour
         // calculate convertion matrix from camera space to world space
         //Matrix4x4 matrix = cameraToWorldMatrix * projectionMatrixInverse;
         // multiply world point by VP matrix
-        Vector4 worldPoint = matrix * planePoint;
+        Vector4 worldPoint = cameraToWorldMatrixProjectionMatrixInverse * planePoint;
 
         return worldPoint;
     }
