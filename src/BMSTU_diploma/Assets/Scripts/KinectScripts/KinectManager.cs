@@ -264,7 +264,6 @@ public class KinectManager : MonoBehaviour
         Parallel.For(0, mapSize, (i) =>
         {
             var (w, h) = GetScreenCoords(i);
-            //newVertices[i] = cam.ScreenToWorldPoint(new Vector3(w, h, NormalizedDepthValues[i] * MeshHeight + planeGridZ));
             newVertices[i] = ManualScreenToWorldPoint(new Vector2(w, h), NormalizedDepthValues[i] * MeshHeight + planeGridZ, conversionCameraToWorldMatrix);
             newVertices[i].z -= planeGridZ;
         });
