@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -49,7 +50,7 @@ public class KinectManager : MonoBehaviour
     int Height = KinectWrapper.GetDepthHeight();
     int MinDepthValue = KinectWrapper.GetMinDepth();
     int MaxDepthValue = KinectWrapper.GetMaxDepth();
-    public float MeshHeigth;
+    public float MeshHeight;
 
     Image bg;
 
@@ -218,13 +219,13 @@ public class KinectManager : MonoBehaviour
                     int BotLeft = Index + Width;
                     int BotRight = Index + 1 + Width;
 
-                    int TrinagleIndex = W + H * (Width - 1);
-                    newTriangles[TrinagleIndex * 6 + 0] = TopLeft;
-                    newTriangles[TrinagleIndex * 6 + 1] = BotLeft;
-                    newTriangles[TrinagleIndex * 6 + 2] = TopRight;
-                    newTriangles[TrinagleIndex * 6 + 3] = BotLeft;
-                    newTriangles[TrinagleIndex * 6 + 4] = BotRight;
-                    newTriangles[TrinagleIndex * 6 + 5] = TopRight;
+                    int TrinagleIndex = (W + H * (Width - 1)) * 6;
+                    newTriangles[TrinagleIndex] = TopLeft;
+                    newTriangles[TrinagleIndex + 1] = BotLeft;
+                    newTriangles[TrinagleIndex + 2] = TopRight;
+                    newTriangles[TrinagleIndex + 3] = BotLeft;
+                    newTriangles[TrinagleIndex + 4] = BotRight;
+                    newTriangles[TrinagleIndex + 5] = TopRight;
                 }
             }
         }
@@ -258,18 +259,18 @@ public class KinectManager : MonoBehaviour
 
     void UpdateMesh()
     {
-        for (int H = 0; H < Height; H++)
+        for (int i = 0; i < newVertices.Length; i++)
         {
-            for (int W = 0; W < Width; W++)
+            var (w, h) = GetScreenCoords(i);
+            newVertices[i] = cam.ScreenToWorldPoint(new Vector3(w, h, FloatValues[i] * MeshHeight + PlaneGrid.transform.position.z));
+            newVertices[i].z -= PlaneGrid.transform.position.z;
+        }
+
+        for (int H = 0; H < Height - 1; H++)
+        {
+            for (int W = 0; W < Width - 1; W++)
             {
                 int Index00 = GetArrayIndex(W, H);
-
-                newVertices[Index00] = cam.ScreenToWorldPoint(new Vector3(W, H, FloatValues[Index00] * MeshHeigth + PlaneGrid.transform.position.z));
-                newVertices[Index00].z -= PlaneGrid.transform.position.z;
-
-                if (H == Height - 1 || W == Width - 1)
-                    continue;
-
                 int Index10 = GetArrayIndex(W + 1, H);
                 int Index01 = GetArrayIndex(W, H + 1);
                 int Index11 = GetArrayIndex(W + 1, H + 1);
@@ -285,23 +286,23 @@ public class KinectManager : MonoBehaviour
                     int BotLeft = Index00 + Width;
                     int BotRight = Index00 + 1 + Width;
 
-                    int TrinagleIndex = W + H * (Width - 1);
-                    newTriangles[TrinagleIndex * 6 + 0] = TopLeft;
-                    newTriangles[TrinagleIndex * 6 + 1] = BotLeft;
-                    newTriangles[TrinagleIndex * 6 + 2] = TopRight;
-                    newTriangles[TrinagleIndex * 6 + 3] = BotLeft;
-                    newTriangles[TrinagleIndex * 6 + 4] = BotRight;
-                    newTriangles[TrinagleIndex * 6 + 5] = TopRight;
+                    int TrinagleIndex = (W + H * (Width - 1)) * 6;
+                    newTriangles[TrinagleIndex] = TopLeft;
+                    newTriangles[TrinagleIndex + 1] = BotLeft;
+                    newTriangles[TrinagleIndex + 2] = TopRight;
+                    newTriangles[TrinagleIndex + 3] = BotLeft;
+                    newTriangles[TrinagleIndex + 4] = BotRight;
+                    newTriangles[TrinagleIndex + 5] = TopRight;
                 }
                 else
                 {
-                    int TrinagleIndex = W + H * (Width - 1);
-                    newTriangles[TrinagleIndex * 6 + 0] = 0;
-                    newTriangles[TrinagleIndex * 6 + 1] = 0;
-                    newTriangles[TrinagleIndex * 6 + 2] = 0;
-                    newTriangles[TrinagleIndex * 6 + 3] = 0;
-                    newTriangles[TrinagleIndex * 6 + 4] = 0;
-                    newTriangles[TrinagleIndex * 6 + 5] = 0;
+                    int TrinagleIndex = (W + H * (Width - 1)) * 6;
+                    newTriangles[TrinagleIndex] = 0;
+                    newTriangles[TrinagleIndex + 1] = 0;
+                    newTriangles[TrinagleIndex + 2] = 0;
+                    newTriangles[TrinagleIndex + 3] = 0;
+                    newTriangles[TrinagleIndex + 4] = 0;
+                    newTriangles[TrinagleIndex + 5] = 0;
                 }
             }
         }
@@ -311,6 +312,7 @@ public class KinectManager : MonoBehaviour
         MyMesh.RecalculateNormals();
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     int GetArrayIndex(int W, int H)
     {
         if ((W < 0) || (W >= Width) || (H < 0) || (H >= Height))
@@ -319,6 +321,12 @@ public class KinectManager : MonoBehaviour
         }
 
         return W + H * Width;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    (int w, int h) GetScreenCoords(int index)
+    {
+        return (index % Width, index / Width);
     }
 
     // Update the Color Map
