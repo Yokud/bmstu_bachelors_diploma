@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -259,12 +260,20 @@ public class KinectManager : MonoBehaviour
 
     void UpdateMesh()
     {
+        var planeGridZ = PlaneGrid.transform.position.z;
         for (int i = 0; i < newVertices.Length; i++)
         {
             var (w, h) = GetScreenCoords(i);
-            newVertices[i] = cam.ScreenToWorldPoint(new Vector3(w, h, FloatValues[i] * MeshHeight + PlaneGrid.transform.position.z));
-            newVertices[i].z -= PlaneGrid.transform.position.z;
+            newVertices[i] = cam.ScreenToWorldPoint(new Vector3(w, h, FloatValues[i] * MeshHeight + planeGridZ));
+            newVertices[i].z -= planeGridZ;
         }
+
+        //Parallel.For(0, newVertices.Length, (i) =>
+        //{
+        //    var (w, h) = GetScreenCoords(i);
+        //    newVertices[i] = cam.ScreenToWorldPoint(new Vector3(w, h, FloatValues[i] * MeshHeight + planeGridZ));
+        //    newVertices[i].z -= planeGridZ;
+        //});
 
         for (int H = 0; H < Height - 1; H++)
         {
