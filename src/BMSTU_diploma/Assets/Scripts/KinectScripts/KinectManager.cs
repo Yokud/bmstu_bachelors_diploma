@@ -263,8 +263,8 @@ public class KinectManager : MonoBehaviour
         var conversionCameraToWorldMatrix = cam.cameraToWorldMatrix * cam.projectionMatrix.inverse;
         Parallel.For(0, mapSize, (i) =>
         {
-            var (w, h) = GetScreenCoords(i);
-            newVertices[i] = ManualScreenToWorldPoint(new Vector2(w, h), NormalizedDepthValues[i] * MeshHeight + planeGridZ, conversionCameraToWorldMatrix);
+            var screenCoords = GetScreenCoords(i);
+            newVertices[i] = ManualScreenToWorldPoint(screenCoords, NormalizedDepthValues[i] * MeshHeight + planeGridZ, conversionCameraToWorldMatrix);
             newVertices[i].z -= planeGridZ;
         });
 
@@ -339,21 +339,10 @@ public class KinectManager : MonoBehaviour
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    int GetArrayIndex(int W, int H)
-    {
-        if ((W < 0) || (W >= Width) || (H < 0) || (H >= Height))
-        {
-            return -1;
-        }
-
-        return W + H * Width;
-    }
+    int GetArrayIndex(int W, int H) => W + H * Width;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    (int w, int h) GetScreenCoords(int index)
-    {
-        return (index % Width, index / Width);
-    }
+    Vector2 GetScreenCoords(int index) => new Vector2(index % Width, index / Width);
 
     // Update the Color Map
     void UpdateColorMap()
