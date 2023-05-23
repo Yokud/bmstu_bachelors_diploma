@@ -260,13 +260,12 @@ public class KinectManager : MonoBehaviour
     void UpdateMesh()
     {
         var planeGridZ = PlaneGrid.transform.position.z;
-        var cameraToWorldMatrix = cam.cameraToWorldMatrix;
-        var projMatrixInverse = cam.projectionMatrix.inverse;
+        var conversionCameraToWorldMatrix = cam.cameraToWorldMatrix * cam.projectionMatrix.inverse;
         Parallel.For(0, mapSize, (i) =>
         {
             var (w, h) = GetScreenCoords(i);
             //newVertices[i] = cam.ScreenToWorldPoint(new Vector3(w, h, NormalizedDepthValues[i] * MeshHeight + planeGridZ));
-            newVertices[i] = ManualScreenToWorldPoint(new Vector2(w, h), NormalizedDepthValues[i] * MeshHeight + planeGridZ, cameraToWorldMatrix, projMatrixInverse);
+            newVertices[i] = ManualScreenToWorldPoint(new Vector2(w, h), NormalizedDepthValues[i] * MeshHeight + planeGridZ, conversionCameraToWorldMatrix);
             newVertices[i].z -= planeGridZ;
         });
 
@@ -316,7 +315,7 @@ public class KinectManager : MonoBehaviour
         MyMesh.RecalculateNormals();
     }
 
-    public Vector3 ManualScreenToWorldPoint(Vector2 screenPoint, float distance, Matrix4x4 cameraToWorldMatrix, Matrix4x4 projectionMatrixInverse)
+    public Vector3 ManualScreenToWorldPoint(Vector2 screenPoint, float distance, Matrix4x4 matrix)
     {
         // here we are converting screen point in screen space to camera space point placed on a plane "distance" away from the camera
         // screen point is in range [(0,0) - (Screen.Width, Screen.Height)]
@@ -326,7 +325,7 @@ public class KinectManager : MonoBehaviour
         Vector4 planePoint = new(pointCameraSpace.x, pointCameraSpace.y, distance, distance); // define the point (don't know why z and w components need to be set to distance)
 
         // calculate convertion matrix from camera space to world space
-        Matrix4x4 matrix = cameraToWorldMatrix * projectionMatrixInverse;
+        //Matrix4x4 matrix = cameraToWorldMatrix * projectionMatrixInverse;
         // multiply world point by VP matrix
         Vector4 worldPoint = matrix * planePoint;
 
