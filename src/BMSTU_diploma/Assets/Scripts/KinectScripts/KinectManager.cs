@@ -44,13 +44,13 @@ public class KinectManager : MonoBehaviour
     Vector3[] newNormals;
     int[] newTriangles;
     Mesh MyMesh;
-    float[] FloatValues;
-    float verticesDepthDeltaTreshold = 0.15f;
+    float[] NormalizedDepthValues;
+    const float verticesDepthDeltaTreshold = 0.15f;
 
-    int Width = KinectWrapper.GetDepthWidth();
-    int Height = KinectWrapper.GetDepthHeight();
-    int MinDepthValue = KinectWrapper.GetMinDepth();
-    int MaxDepthValue = KinectWrapper.GetMaxDepth();
+    readonly int Width = KinectWrapper.GetDepthWidth();
+    readonly int Height = KinectWrapper.GetDepthHeight();
+    readonly int MinDepthValue = KinectWrapper.GetMinDepth();
+    readonly int MaxDepthValue = KinectWrapper.GetMaxDepth();
     public float MeshHeight;
 
     Image bg;
@@ -183,7 +183,7 @@ public class KinectManager : MonoBehaviour
         {
             if (depthStreamHandle != IntPtr.Zero && KinectWrapper.PollDepth(depthStreamHandle, KinectWrapper.Constants.IsNearMode, ref depthMap))
             {
-                CalculateFloatValues();
+                NormalizeDepthValues();
                 UpdateMesh();
             }
 
@@ -199,7 +199,7 @@ public class KinectManager : MonoBehaviour
 
     void SetupArrays()
     {
-        FloatValues = new float[Width * Height];
+        NormalizedDepthValues = new float[Width * Height];
         newVertices = new Vector3[Width * Height];
         newNormals = new Vector3[Width * Height];
         newTriangles = new int[(Width - 1) * (Height - 1) * 6];
@@ -243,19 +243,18 @@ public class KinectManager : MonoBehaviour
         frustumWidth = frustumHeight * cam.aspect;
     }
 
-    void CalculateFloatValues()
+    void NormalizeDepthValues()
     {
-        for (int i = 0; i < mapSize; i++)
+        Parallel.For(0, mapSize, (i) =>
         {
             int ImageValue = KinectWrapper.GetRealDepth(depthMap[mapSize - i - 1]);
 
             //Clamp Value
-            ImageValue = (ushort)Mathf.Clamp(ImageValue, MinDepthValue, MaxDepthValue);
+            ImageValue = Mathf.Clamp(ImageValue, MinDepthValue, MaxDepthValue);
 
             //Calculate
-            float FloatValue = (ImageValue - MinDepthValue) / (float)(MaxDepthValue - MinDepthValue);
-            FloatValues[i] = FloatValue;
-        }
+            NormalizedDepthValues[i] = (ImageValue - MinDepthValue) / (float)(MaxDepthValue - MinDepthValue);
+        });
     }
 
     void UpdateMesh()
@@ -264,18 +263,11 @@ public class KinectManager : MonoBehaviour
         for (int i = 0; i < newVertices.Length; i++)
         {
             var (w, h) = GetScreenCoords(i);
-            newVertices[i] = cam.ScreenToWorldPoint(new Vector3(w, h, FloatValues[i] * MeshHeight + planeGridZ));
+            newVertices[i] = cam.ScreenToWorldPoint(new Vector3(w, h, NormalizedDepthValues[i] * MeshHeight + planeGridZ));
             newVertices[i].z -= planeGridZ;
         }
 
-        //Parallel.For(0, newVertices.Length, (i) =>
-        //{
-        //    var (w, h) = GetScreenCoords(i);
-        //    newVertices[i] = cam.ScreenToWorldPoint(new Vector3(w, h, FloatValues[i] * MeshHeight + planeGridZ));
-        //    newVertices[i].z -= planeGridZ;
-        //});
-
-        for (int H = 0; H < Height - 1; H++)
+        Parallel.For(0, Height - 1, (H) =>
         {
             for (int W = 0; W < Width - 1; W++)
             {
@@ -283,12 +275,12 @@ public class KinectManager : MonoBehaviour
                 int Index10 = GetArrayIndex(W + 1, H);
                 int Index01 = GetArrayIndex(W, H + 1);
                 int Index11 = GetArrayIndex(W + 1, H + 1);
-                float avgDepth = (FloatValues[Index00] + FloatValues[Index10] + FloatValues[Index01] + FloatValues[Index11]) / 4f;
+                float avgDepth = (NormalizedDepthValues[Index00] + NormalizedDepthValues[Index10] + NormalizedDepthValues[Index01] + NormalizedDepthValues[Index11]) / 4f;
 
-                if (Mathf.Abs(FloatValues[Index00] - avgDepth) < verticesDepthDeltaTreshold &&
-                    Mathf.Abs(FloatValues[Index10] - avgDepth) < verticesDepthDeltaTreshold
-                    && Mathf.Abs(FloatValues[Index01] - avgDepth) < verticesDepthDeltaTreshold
-                    && Mathf.Abs(FloatValues[Index11] - avgDepth) < verticesDepthDeltaTreshold)
+                if (Mathf.Abs(NormalizedDepthValues[Index00] - avgDepth) < verticesDepthDeltaTreshold &&
+                    Mathf.Abs(NormalizedDepthValues[Index10] - avgDepth) < verticesDepthDeltaTreshold
+                    && Mathf.Abs(NormalizedDepthValues[Index01] - avgDepth) < verticesDepthDeltaTreshold
+                    && Mathf.Abs(NormalizedDepthValues[Index11] - avgDepth) < verticesDepthDeltaTreshold)
                 {
                     int TopLeft = Index00;
                     int TopRight = Index00 + 1;
@@ -314,7 +306,7 @@ public class KinectManager : MonoBehaviour
                     newTriangles[TrinagleIndex + 5] = 0;
                 }
             }
-        }
+        });
 
         MyMesh.vertices = newVertices;
         MyMesh.triangles = newTriangles;
