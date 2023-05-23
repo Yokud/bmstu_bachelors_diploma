@@ -43,7 +43,7 @@ public class KinectManager : MonoBehaviour
     Vector3[] newVertices;
     Vector3[] newNormals;
     int[] newTriangles;
-    Mesh MyMesh;
+    Mesh myMesh;
     float[] NormalizedDepthValues;
     const float verticesDepthDeltaTreshold = 0.15f;
 
@@ -159,11 +159,12 @@ public class KinectManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MyMesh = new Mesh
+        myMesh = new Mesh
         {
             indexFormat = UnityEngine.Rendering.IndexFormat.UInt32
         };
-        PlaneGrid.GetComponent<MeshFilter>().mesh = MyMesh;
+        PlaneGrid.GetComponent<MeshFilter>().mesh = myMesh;
+        PlaneGrid.GetComponent<MeshCollider>().sharedMesh = myMesh;
 
         bg = Background.GetComponentInChildren<Image>();
 
@@ -231,10 +232,10 @@ public class KinectManager : MonoBehaviour
             }
         }
 
-        MyMesh.Clear();
-        MyMesh.vertices = newVertices;
-        MyMesh.normals = newNormals;
-        MyMesh.triangles = newTriangles;
+        myMesh.Clear();
+        myMesh.vertices = newVertices;
+        myMesh.normals = newNormals;
+        myMesh.triangles = newTriangles;
     }
 
     private void GetFrustumParams(float distance, out float frustumHeight, out float frustumWidth)
@@ -309,9 +310,9 @@ public class KinectManager : MonoBehaviour
             }
         });
 
-        MyMesh.vertices = newVertices;
-        MyMesh.triangles = newTriangles;
-        MyMesh.RecalculateNormals();
+        myMesh.vertices = newVertices;
+        myMesh.triangles = newTriangles;
+        myMesh.RecalculateNormals();
     }
 
     /// <summary>

@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class ExamplesManager : MonoBehaviour
 {
-    public float DefaultSpawnExamplesDistanse = 80f;
+    public float DefaultSpawnExamplesDistanse = 40f;
     public List<GameObject> Examples;
-    public float MoveSpeed = 20f;
-    public float RotateSpeed = 30f;
+
 
     Camera cam;
     GameObject selectedExample;
@@ -25,8 +24,11 @@ public class ExamplesManager : MonoBehaviour
         SpawnExamples();
         if (selectedExample != null)
         {
-            MoveSelectedExample();
-            RotateSelectedExample();
+            if (selectedExample.TryGetComponent<ExampleManager>(out var code))
+            {
+                code.MoveSelectedExample();
+                code.RotateSelectedExample();
+            }   
         }
     }
 
@@ -80,40 +82,5 @@ public class ExamplesManager : MonoBehaviour
             Destroy(selectedExample);
             selectedExample = null;
         }
-    }
-
-    void MoveSelectedExample()
-    {
-        float deltaX = Input.GetAxis("Horizontal") * MoveSpeed;
-        float deltaZ = Input.GetAxis("Vertical") * MoveSpeed;
-        float deltaY = 0;
-
-        if (Input.GetKey(KeyCode.Space))
-            deltaY += MoveSpeed;
-        else if (Input.GetKey(KeyCode.LeftShift))
-            deltaY -= MoveSpeed;
-
-        var movement = new Vector3(deltaX, deltaY, deltaZ);
-
-        movement = Vector3.ClampMagnitude(movement, MoveSpeed);
-
-        movement *= Time.deltaTime;
-        selectedExample.transform.Translate(movement, Space.World);
-    }
-
-    void RotateSelectedExample()
-    {
-        if (Input.GetKey(KeyCode.R))
-            selectedExample.transform.Rotate(RotateSpeed * Time.deltaTime * Vector3.up);
-        else if (Input.GetKey(KeyCode.F))
-            selectedExample.transform.Rotate(RotateSpeed * Time.deltaTime * Vector3.down);
-        else if (Input.GetKey(KeyCode.Y))
-            selectedExample.transform.Rotate(RotateSpeed * Time.deltaTime * Vector3.right);
-        else if (Input.GetKey(KeyCode.H))
-            selectedExample.transform.Rotate(RotateSpeed * Time.deltaTime * Vector3.left);
-        else if (Input.GetKey(KeyCode.T))
-            selectedExample.transform.Rotate(RotateSpeed * Time.deltaTime * Vector3.forward);
-        else if (Input.GetKey(KeyCode.G))
-            selectedExample.transform.Rotate(RotateSpeed * Time.deltaTime * Vector3.back);
     }
 }

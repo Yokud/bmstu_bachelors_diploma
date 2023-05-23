@@ -674,6 +674,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 654482301}
   m_CullTransparentMesh: 1
+--- !u!1 &663371009 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3183304651030707441, guid: 8c6d12e04221efd438ae57d3a5d4ac8f, type: 3}
+  m_PrefabInstance: {fileID: 3183304650241955335}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &663371015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 663371009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4257598426520bf4fb88c9d2386b4fee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MoveSpeed: 20
+  RotateSpeed: 30
 --- !u!1001 &1033606700
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -743,7 +762,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6631466265157997366, guid: 88cc575159bf28e4294058e166d9a18c, type: 3}
       propertyPath: m_Lightmapping
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6631466265157997366, guid: 88cc575159bf28e4294058e166d9a18c, type: 3}
       propertyPath: m_Shadows.m_Resolution
@@ -829,6 +848,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1190914356}
   - component: {fileID: 1190914355}
+  - component: {fileID: 1190914357}
   m_Layer: 0
   m_Name: SceneManager
   m_TagString: Untagged
@@ -864,6 +884,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1190914357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1190914354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b628f457f14aa1488444b1cb90e6567, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DefaultSpawnExamplesDistanse: 40
+  Examples:
+  - {fileID: 3183304651030707441, guid: 8c6d12e04221efd438ae57d3a5d4ac8f, type: 3}
 --- !u!1 &1477954019
 GameObject:
   m_ObjectHideFlags: 0
@@ -1005,7 +1040,7 @@ MonoBehaviour:
   Background: {fileID: 1477954019}
   SensorAngle: 0
   SensorHeight: 1
-  MeshHeigth: 320
+  MeshHeight: 320
   CalibrationText: {fileID: 29219033}
 --- !u!81 &2093910741
 AudioListener:
@@ -1233,5 +1268,18 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Examples
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 3183304651030707455, guid: 8c6d12e04221efd438ae57d3a5d4ac8f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3183304651030707455, guid: 8c6d12e04221efd438ae57d3a5d4ac8f, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Constraints
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 8c6d12e04221efd438ae57d3a5d4ac8f, type: 3}
