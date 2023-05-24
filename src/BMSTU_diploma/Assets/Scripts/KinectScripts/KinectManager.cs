@@ -101,13 +101,13 @@ public class KinectManager : MonoBehaviour
             if (CalibrationText != null)
             {
                 CalibrationText.color = Color.red;
-                CalibrationText.text = "Status: " + message;
+                CalibrationText.text = "Kinect status: " + message;
             }
             return;
         }
         catch (Exception e)
         {
-            string message = "Status: " + e.Message + " - " + KinectWrapper.GetNuiErrorString(hr);
+            string message = "Kinect status: " + e.Message + " - " + KinectWrapper.GetNuiErrorString(hr);
             Debug.LogError(message);
             Debug.LogError(e.ToString());
             if (CalibrationText != null)
@@ -132,7 +132,7 @@ public class KinectManager : MonoBehaviour
         if (CalibrationText != null)
         {
             CalibrationText.color = Color.black;
-            CalibrationText.text = "Status: " + "Kinect initialized";
+            CalibrationText.text = "Kinect status: Kinect initialized";
         }
 
         Debug.Log("Kinect initialized.");

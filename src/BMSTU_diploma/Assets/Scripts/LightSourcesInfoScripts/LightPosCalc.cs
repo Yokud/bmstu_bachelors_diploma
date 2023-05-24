@@ -14,11 +14,13 @@ public class LightPosCalc : MonoBehaviour
     public int MedianBlurWindow = 35;
     public Button StartButton;
     public GameObject EnvironmentData;
+    public Text ErrorText;
 
     private void Start()
     {
         Button btn = StartButton.GetComponent<Button>();
         btn.onClick.AddListener(Calc);
+        ErrorText.color = Color.red;
     }
 
     public void Calc()
@@ -27,6 +29,7 @@ public class LightPosCalc : MonoBehaviour
         if (env.SpherePano is null || env.SphereDepthPano is null)
         {
             Debug.Log("Environment data are not loaded yet");
+            ErrorText.text = "Error: Environment data are not loaded yet";
             return;
         }
 
@@ -40,6 +43,7 @@ public class LightPosCalc : MonoBehaviour
         if (maxGray / avgGray < 1.5)
         {
             Debug.Log("Can't calculate light source positions, because the sphere map has no observable difference between point light and ambient light");
+            ErrorText.text = "Error: Can't calculate light source positions, because the sphere map has no observable difference between point light and ambient light";
             return;
         }
 
@@ -89,6 +93,7 @@ public class LightPosCalc : MonoBehaviour
         if (!decartCoords.Any())
         {
             Debug.Log("Can't find any light source");
+            ErrorText.text = "Error: Can't find any light source";
             return;
         }
 

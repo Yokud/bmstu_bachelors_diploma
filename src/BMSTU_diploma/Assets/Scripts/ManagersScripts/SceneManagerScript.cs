@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SceneManagerScript : MonoBehaviour
 {
     public GameObject LightPrefab;
+    public Text LightStatusText;
 
-    List<GameObject> prefabClones = new List<GameObject>();
+    List<GameObject> prefabClones = new();
 
     // Start is called before the first frame update
     void Start()
@@ -15,6 +17,8 @@ public class SceneManagerScript : MonoBehaviour
         if (LightPrefab == null || EnvDataFields.LightCoords == null)
         {
             Debug.LogError("Light prefab is not installed or no light sources");
+            LightStatusText.color = Color.red;
+            LightStatusText.text = "Light status: Light prefab is not installed or no light sources";
             return;
         }
 
