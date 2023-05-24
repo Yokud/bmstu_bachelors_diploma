@@ -12,11 +12,7 @@ public class KinectManager : MonoBehaviour
     public GameObject PlaneGrid;
     public GameObject Background;
 
-    // Kinect elevation angle (in degrees)
-    public int SensorAngle = 0;
-
-    // How high off the ground is the sensor (in meters).
-    public float SensorHeight = 1.0f;
+    public int MinMatchPointsCount = 4;
 
     // Bool to keep track of whether Kinect has been initialized
     private bool kinectInitialized = false;
@@ -56,7 +52,7 @@ public class KinectManager : MonoBehaviour
 
     Image bg;
 
-    Mat spherePano;
+    Mat spherePano, sphereDepthPano, frame;
 
     public Text CalibrationText;
 
@@ -178,6 +174,7 @@ public class KinectManager : MonoBehaviour
         rt.sizeDelta = new Vector2(bgWidth, bgHeight);
 
         spherePano = EnvDataFields.SpherePano;
+        sphereDepthPano = EnvDataFields.SphereDepthPano;
 
         SetupArrays();
     }
@@ -348,17 +345,116 @@ public class KinectManager : MonoBehaviour
     int GetArrayIndex(int W, int H) => W + H * Width;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    Vector2 GetScreenCoords(int index) => new Vector2(index % Width, index / Width);
+    Vector2 GetScreenCoords(int index) => new(index % Width, index / Width);
 
     // Update the Color Map
     void UpdateColorMap()
     {
         ColorTexture.SetPixels32(colorImage);
         ColorTexture.Apply();
+        frame = OpenCvSharp.Unity.TextureToMat(ColorTexture);
     }
 
     void UpdateCameraOrientation()
     {
+        if (spherePano == null)
+            return;
 
+        AKAZE akaze = AKAZE.Create();
+        Mat panoDescr = new(), frameDescr = new();
+
+        akaze.DetectAndCompute(spherePano, new Mat(), out KeyPoint[] panoKeyPoints, panoDescr);
+        akaze.DetectAndCompute(frame, new Mat(), out KeyPoint[] frameKeyPoints, frameDescr);
+
+        DescriptorMatcher matcher = DescriptorMatcher.Create("BruteForce-Hamming");
+        var knnMatches = matcher.KnnMatch(frameDescr, panoDescr, 2);
+
+        float ratioThreshold = 0.8f; // Nearest neighbor matching ratio
+        List<Point2f> listOfMatchedPano = new();
+        List<Point2f> listOfMatchedFrame = new();
+        for (int i = 0; i < knnMatches.Length; i++)
+        {
+            DMatch[] matches = knnMatches[i];
+            float dist1 = matches[0].Distance;
+            float dist2 = matches[1].Distance;
+            if (dist1 < ratioThreshold * dist2)
+            {
+                listOfMatchedPano.Add(panoKeyPoints[matches[0].TrainIdx].Pt);
+                listOfMatchedFrame.Add(frameKeyPoints[matches[0].QueryIdx].Pt);
+            }
+        }
+
+        if (listOfMatchedPano.Count < MinMatchPointsCount)
+        {
+            Debug.Log("Too less match points");
+            return;
+        }
+
+        var matchedPoints = listOfMatchedPano.Count;
+        Point3f[] pano3D = new Point3f[matchedPoints];
+        Point3f[] frame3D = new Point3f[matchedPoints];
+        var conversionCameraToWorldMatrix = cam.cameraToWorldMatrix * cam.projectionMatrix.inverse;
+        for (int i = 0; i < matchedPoints; i++)
+        {
+            pano3D[i] = GetDecartCoordsFromPanos(listOfMatchedPano[i], spherePano, sphereDepthPano);
+
+            var worldFramePoint = ManualScreenToWorldPoint(new Vector2(listOfMatchedFrame[i].X, listOfMatchedFrame[i].Y), Mathf.Max(sphereDepthPano.Get<Vec3w>(Mathf.RoundToInt(listOfMatchedFrame[i].X), Mathf.RoundToInt(listOfMatchedFrame[i].Y))[0] / 10f, 80f), conversionCameraToWorldMatrix);
+            frame3D[i] = new Point3f(worldFramePoint.x, worldFramePoint.y, worldFramePoint.z);
+        }
+
+        Point3f meanPano = new(), meanFrame = new();
+        for (int i = 0; i < matchedPoints; i++)
+        {
+            meanPano += pano3D[i];
+            meanFrame += frame3D[i];
+        }
+
+        meanPano = new Point3f(meanPano.X / listOfMatchedFrame.Count, meanPano.Y / listOfMatchedFrame.Count, meanPano.Z / listOfMatchedFrame.Count);
+        meanFrame = new Point3f(meanFrame.X / listOfMatchedFrame.Count, meanFrame.Y / listOfMatchedFrame.Count, meanFrame.Z / listOfMatchedFrame.Count);
+
+        Point3f[] pano3DDecentrized = new Point3f[matchedPoints];
+        Point3f[] frame3DDecentrized = new Point3f[matchedPoints];
+
+        for (int i = 0; i < matchedPoints; i++)
+        {
+            pano3DDecentrized[i] = pano3D[i] - meanPano;
+            frame3DDecentrized[i] = frame3D[i] - meanFrame;
+        }
+
+        Mat pano3dDecentrMat = new(1, pano3DDecentrized.Length, MatType.CV_32F, pano3DDecentrized);
+        Mat frame3dDecentrMat = new(1, frame3DDecentrized.Length, MatType.CV_32F, frame3DDecentrized);
+
+        Mat h = pano3dDecentrMat * frame3dDecentrMat.Transpose();
+
+        Mat u = new(), s = new(), v = new();
+        Cv2.SVDecomp(h, u, s, v);
+
+        Mat r = v * u.Transpose();
+
+        if (r.Determinant() < 0)
+        {
+            Mat uLocal = new(), sLocal = new(), vLocal = new();
+            Cv2.SVDecomp(r, uLocal, sLocal, vLocal);
+
+            vLocal.Set(0, 2, -vLocal.At<float>(0, 2));
+            vLocal.Set(1, 2, -vLocal.At<float>(1, 2));
+            vLocal.Set(2, 2, -vLocal.At<float>(2, 2));
+
+            r = vLocal * uLocal.Transpose();
+        }
+
+        Mat t = -r * new Mat(1, 3, MatType.CV_32F, new[] { meanPano.X, meanPano.Y, meanPano.Z }) + new Mat(1, 3, MatType.CV_32F, new[] { meanFrame.X, meanFrame.Y, meanFrame.Z });
+
+        Mat rvec = new();
+        Cv2.Rodrigues(r, rvec);
+
+        cam.transform.SetPositionAndRotation(new Vector3(t.At<float>(0), t.At<float>(1), t.At<float>(2)), Quaternion.Euler(rvec.At<float>(0), rvec.At<float>(1), rvec.At<float>(2)));
+    }
+
+    static Point3f GetDecartCoordsFromPanos(Point2f v, Mat spherePano, Mat sphereDepthPano)
+    {
+        var radius = Mathf.Max(sphereDepthPano.Get<Vec3w>(Mathf.RoundToInt(v.X), Mathf.RoundToInt(v.Y))[0] / 10f, 80f);
+        var polarCoords = new Vector3(radius, 2 * Mathf.PI * v.X / spherePano.Width, Mathf.PI * (spherePano.Height / 2 - v.Y) / spherePano.Height);
+        return new Point3f(polarCoords.x * Mathf.Sin(polarCoords.y) * Mathf.Cos(polarCoords.z), polarCoords.x * Mathf.Sin(polarCoords.y) * Mathf.Sin(polarCoords.z), polarCoords.x * Mathf.Cos(polarCoords.z));
     }
 }
