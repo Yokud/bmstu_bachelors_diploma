@@ -27,8 +27,7 @@ public class SavePano : MonoBehaviour
             tex.LoadImage(fileData);
             var fileContent = OpenCvSharp.Unity.TextureToMat(tex);
 
-            var env = PanoReceiver.GetComponent<EnvDataFields>();
-            env.SpherePano = fileContent;
+            EnvDataFields.SpherePano = fileContent;
         }
     }
 }

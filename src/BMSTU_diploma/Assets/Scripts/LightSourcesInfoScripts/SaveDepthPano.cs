@@ -43,8 +43,7 @@ public class SaveDepthPano : MonoBehaviour
 
             var fileContent = new Mat(tex.height, tex.width, MatType.CV_16UC3, rgbPixels.Reverse().ToArray());
 
-            var env = PanoReceiver.GetComponent<EnvDataFields>();
-            env.SphereDepthPano = fileContent;
+            EnvDataFields.SphereDepthPano = fileContent;
         }
     }
 }

@@ -1,3 +1,4 @@
+using OpenCvSharp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -54,6 +55,8 @@ public class KinectManager : MonoBehaviour
     public float MeshHeight;
 
     Image bg;
+
+    Mat spherePano;
 
     public Text CalibrationText;
 
@@ -174,6 +177,8 @@ public class KinectManager : MonoBehaviour
         var rt = Background.GetComponent<RectTransform>();
         rt.sizeDelta = new Vector2(bgWidth, bgHeight);
 
+        spherePano = EnvDataFields.SpherePano;
+
         SetupArrays();
     }
 
@@ -192,7 +197,7 @@ public class KinectManager : MonoBehaviour
             {
                 UpdateColorMap();
                 if (bg != null)
-                    bg.sprite = Sprite.Create(ColorTexture, new Rect(0 ,0, Width, Height), new Vector2());
+                    bg.sprite = Sprite.Create(ColorTexture, new UnityEngine.Rect(0 ,0, Width, Height), new Vector2());
                 UpdateCameraOrientation();
             }
         }

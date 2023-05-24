@@ -21,21 +21,21 @@ public class LightPosCalc : MonoBehaviour
         Button btn = StartButton.GetComponent<Button>();
         btn.onClick.AddListener(Calc);
         ErrorText.color = Color.red;
+        ErrorText.text = "";
     }
 
     public void Calc()
     {
-        var env = EnvironmentData.GetComponent<EnvDataFields>();
-        if (env.SpherePano is null || env.SphereDepthPano is null)
+        if (EnvDataFields.SpherePano is null || EnvDataFields.SphereDepthPano is null)
         {
             Debug.Log("Environment data are not loaded yet");
             ErrorText.text = "Error: Environment data are not loaded yet";
             return;
         }
 
-        int spherePanoWidth = env.SpherePano.Width, spherePanoHeight = env.SpherePano.Height;
+        int spherePanoWidth = EnvDataFields.SpherePano.Width, spherePanoHeight = EnvDataFields.SpherePano.Height;
         var grayscaled = new Mat();
-        Cv2.CvtColor(env.SpherePano, grayscaled, ColorConversionCodes.BGRA2GRAY);
+        Cv2.CvtColor(EnvDataFields.SpherePano, grayscaled, ColorConversionCodes.BGRA2GRAY);
 
         grayscaled.MinMaxLoc(out double minGray, out double maxGray);
         var avgGray = grayscaled.Mean(grayscaled).Val0;
@@ -77,7 +77,7 @@ public class LightPosCalc : MonoBehaviour
         {
             moments[i] = Cv2.Moments(contours[i]);
             centroids[i] = new Point(moments[i].M10 / moments[i].M00, moments[i].M01 / moments[i].M00);
-            radiuses[i] = GetAverageContourDepth(env, contours[i]);
+            radiuses[i] = GetAverageContourDepth(contours[i]);
         }
 
         var polarCoords = new Vector3[centroids.Length];
@@ -102,7 +102,7 @@ public class LightPosCalc : MonoBehaviour
         SceneManager.LoadScene("ARScene");
     }
 
-    float GetAverageContourDepth(EnvDataFields env, Point[] contour, int notValidValue = 0)
+    float GetAverageContourDepth(Point[] contour, int notValidValue = 0)
     {
         var minX = contour.Min(p => p.X);
         var maxX = contour.Max(p => p.X);
@@ -115,7 +115,7 @@ public class LightPosCalc : MonoBehaviour
         for (int i = minX; i < maxX; i++)
             for (int j = minY; j < maxY; j++)
             {
-                var val = env.SphereDepthPano.Get<Vec3w>(i, j)[0] / 10f; // mm -> cm
+                var val = EnvDataFields.SphereDepthPano.Get<Vec3w>(i, j)[0] / 10f; // mm -> cm
                 if (val != notValidValue)
                 {
                     sumDepth += val;
