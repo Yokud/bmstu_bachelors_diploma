@@ -34,7 +34,7 @@ public class ExamplesManager : MonoBehaviour
 
     private void SpawnExamples()
     {
-        if (Input.GetKey(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             var point = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, DefaultSpawnExamplesDistanse));
 
@@ -44,7 +44,7 @@ public class ExamplesManager : MonoBehaviour
                 clone.transform.position = point;
             }
         }
-        else if (Input.GetKey(KeyCode.Alpha2))
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             var point = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, DefaultSpawnExamplesDistanse));
 
@@ -54,7 +54,7 @@ public class ExamplesManager : MonoBehaviour
                 clone.transform.position = point;
             }
         }
-        else if (Input.GetKey(KeyCode.Alpha3))
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             var point = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, DefaultSpawnExamplesDistanse));
 
@@ -68,16 +68,16 @@ public class ExamplesManager : MonoBehaviour
 
     private void ManageExamples()
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonDown(0))
         {
             var ray = cam.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out RaycastHit hit) && hit.transform.CompareTag("Examples"))
                 selectedExample = hit.transform.gameObject;
         }
-        else if (Input.GetMouseButton(1))
+        else if (Input.GetMouseButtonDown(1))
             selectedExample = null;
-        else if (Input.GetKey(KeyCode.Delete) && selectedExample != null)
+        else if (Input.GetKeyDown(KeyCode.Delete) && selectedExample != null)
         {
             Destroy(selectedExample);
             selectedExample = null;
