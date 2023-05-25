@@ -26,6 +26,8 @@ public class SceneManagerScript : MonoBehaviour
         {
             prefabClones.Add(Instantiate(LightPrefab, lightPos, Quaternion.identity));
         }
+
+        LightStatusText.text = "Light status: Light sources was placed";
     }
 
     // Update is called once per frame
