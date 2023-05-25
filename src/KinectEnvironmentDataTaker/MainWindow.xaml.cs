@@ -190,10 +190,6 @@ namespace KinectEnvironmentDataTaker
 
                         // Write out blue byte                        
                         coloredDepthPixels[colorPixelIndex++] = intensity;
-
-                        //// We're outputting BGR, the last byte in the 32 bits is unused so skip it
-                        //// If we were outputting BGRA, we would write alpha here.
-                        //++colorPixelIndex;
                     }
 
                     // Write the pixel data into our bitmap
