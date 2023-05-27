@@ -1258,7 +1258,7 @@ MonoBehaviour:
   PlaneGrid: {fileID: 287486370}
   Background: {fileID: 1477954019}
   MinMatchPointsCount: 4
-  MaxMatchPointsCount: 10
+  MaxMatchPointsCount: 15
   MeshHeight: 320
   CalibrationText: {fileID: 29219033}
 --- !u!81 &2093910741
@@ -1351,7 +1351,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2093910739}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b626bbfa602e3f4bbf7224123a5589f, type: 3}
   m_Name: 
@@ -1366,7 +1366,7 @@ CharacterController:
   m_GameObject: {fileID: 2093910739}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Height: 2
   m_Radius: 0.5
@@ -1382,7 +1382,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2093910739}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: caf6d271feb60c04baff60578b2ccaa7, type: 3}
   m_Name: 
