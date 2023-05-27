@@ -88,7 +88,7 @@ public class LightPosCalc : MonoBehaviour
             decartCoords[i] = new Vector3(polarCoords[i].x * Mathf.Sin(polarCoords[i].y) * Mathf.Cos(polarCoords[i].z), polarCoords[i].x * Mathf.Sin(polarCoords[i].y) * Mathf.Sin(polarCoords[i].z), polarCoords[i].x * Mathf.Cos(polarCoords[i].z));
         }
 
-        decartCoords = decartCoords.Where(p => float.IsFinite(p.x) && float.IsFinite(p.y) && float.IsFinite(p.z)).ToArray();
+        decartCoords = decartCoords.Where(p => float.IsFinite(p.x) && float.IsFinite(p.y) && float.IsFinite(p.z)).ToArray(); // false when radius is NaN or infinity (valid points = 0)
 
         if (!decartCoords.Any())
         {
