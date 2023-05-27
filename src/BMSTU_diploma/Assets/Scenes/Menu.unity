@@ -797,7 +797,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2831c807488ff44dafc9d7fda398b9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MedianBlurWindow: 35
+  MedianBlurWindow: 39
   StartButton: {fileID: 1177814737}
   EnvironmentData: {fileID: 2118318533}
   ErrorText: {fileID: 1940255317}
@@ -1487,7 +1487,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!114 &2118318534
 MonoBehaviour:

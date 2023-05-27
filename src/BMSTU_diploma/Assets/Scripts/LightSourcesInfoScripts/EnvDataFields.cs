@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnvDataFields : MonoBehaviour
+public static class EnvDataFields
 {
     public static Mat SpherePano, SphereDepthPano;
 

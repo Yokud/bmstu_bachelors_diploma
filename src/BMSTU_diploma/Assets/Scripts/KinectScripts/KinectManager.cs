@@ -52,7 +52,11 @@ public class KinectManager : MonoBehaviour
 
     Image bg;
 
-    Mat spherePano, sphereDepthPano, frame;
+    Mat frame;
+
+    AKAZE akaze = AKAZE.Create();
+    Mat panoDescr = new();
+    KeyPoint[] panoKeyPoints;
 
     public Text CalibrationText;
 
@@ -173,8 +177,7 @@ public class KinectManager : MonoBehaviour
         var rt = Background.GetComponent<RectTransform>();
         rt.sizeDelta = new Vector2(bgWidth, bgHeight);
 
-        spherePano = EnvDataFields.SpherePano;
-        sphereDepthPano = EnvDataFields.SphereDepthPano;
+        akaze.DetectAndCompute(EnvDataFields.SpherePano, new Mat(), out panoKeyPoints, panoDescr);
 
         SetupArrays();
     }
@@ -357,13 +360,11 @@ public class KinectManager : MonoBehaviour
 
     void UpdateCameraOrientation()
     {
-        if (spherePano == null)
+        if (EnvDataFields.SpherePano == null || EnvDataFields.SphereDepthPano == null)
             return;
 
-        AKAZE akaze = AKAZE.Create();
-        Mat panoDescr = new(), frameDescr = new();
+        Mat frameDescr = new();
 
-        akaze.DetectAndCompute(spherePano, new Mat(), out KeyPoint[] panoKeyPoints, panoDescr);
         akaze.DetectAndCompute(frame, new Mat(), out KeyPoint[] frameKeyPoints, frameDescr);
 
         DescriptorMatcher matcher = DescriptorMatcher.Create("BruteForce-Hamming");
@@ -396,9 +397,9 @@ public class KinectManager : MonoBehaviour
         var conversionCameraToWorldMatrix = cam.cameraToWorldMatrix * cam.projectionMatrix.inverse;
         for (int i = 0; i < matchedPoints; i++)
         {
-            pano3D[i] = GetDecartCoordsFromPanos(listOfMatchedPano[i], spherePano, sphereDepthPano);
+            pano3D[i] = GetDecartCoordsFromPanos(listOfMatchedPano[i]);
 
-            var worldFramePoint = ManualScreenToWorldPoint(new Vector2(listOfMatchedFrame[i].X, listOfMatchedFrame[i].Y), Mathf.Max(sphereDepthPano.Get<Vec3w>(Mathf.RoundToInt(listOfMatchedFrame[i].X), Mathf.RoundToInt(listOfMatchedFrame[i].Y))[0] / 10f, 80f), conversionCameraToWorldMatrix);
+            var worldFramePoint = ManualScreenToWorldPoint(new Vector2(listOfMatchedFrame[i].X, listOfMatchedFrame[i].Y), KinectWrapper.GetRealDepth(depthMap[mapSize - GetArrayIndex(Mathf.RoundToInt(listOfMatchedFrame[i].X), Mathf.RoundToInt(listOfMatchedFrame[i].Y)) - 1]) / 10f, conversionCameraToWorldMatrix);
             frame3D[i] = new Point3f(worldFramePoint.x, worldFramePoint.y, worldFramePoint.z);
         }
 
@@ -409,8 +410,8 @@ public class KinectManager : MonoBehaviour
             meanFrame += frame3D[i];
         }
 
-        meanPano = new Point3f(meanPano.X / listOfMatchedFrame.Count, meanPano.Y / listOfMatchedFrame.Count, meanPano.Z / listOfMatchedFrame.Count);
-        meanFrame = new Point3f(meanFrame.X / listOfMatchedFrame.Count, meanFrame.Y / listOfMatchedFrame.Count, meanFrame.Z / listOfMatchedFrame.Count);
+        meanPano = new Point3f(meanPano.X / matchedPoints, meanPano.Y / matchedPoints, meanPano.Z / matchedPoints);
+        meanFrame = new Point3f(meanFrame.X / matchedPoints, meanFrame.Y / matchedPoints, meanFrame.Z / matchedPoints);
 
         Point3f[] pano3DDecentrized = new Point3f[matchedPoints];
         Point3f[] frame3DDecentrized = new Point3f[matchedPoints];
@@ -421,40 +422,58 @@ public class KinectManager : MonoBehaviour
             frame3DDecentrized[i] = frame3D[i] - meanFrame;
         }
 
-        Mat pano3dDecentrMat = new(1, pano3DDecentrized.Length, MatType.CV_32F, pano3DDecentrized);
-        Mat frame3dDecentrMat = new(1, frame3DDecentrized.Length, MatType.CV_32F, frame3DDecentrized);
+        float[] pano3DDecentrValues = new float[matchedPoints * 3];
+        float[] frame3DDecentrValues = new float[matchedPoints * 3];
 
-        Mat h = pano3dDecentrMat * frame3dDecentrMat.Transpose();
+        for (int i = 0; i < matchedPoints * 3; i += 3) 
+        {
+            pano3DDecentrValues[i] = pano3DDecentrized[i / 3].X;
+            pano3DDecentrValues[i + 1] = pano3DDecentrized[i / 3].Y;
+            pano3DDecentrValues[i + 2] = pano3DDecentrized[i / 3].Z;
 
-        Mat u = new(), s = new(), v = new();
-        Cv2.SVDecomp(h, u, s, v);
+            frame3DDecentrValues[i] = frame3DDecentrized[i / 3].X;
+            frame3DDecentrValues[i + 1] = frame3DDecentrized[i / 3].Y;
+            frame3DDecentrValues[i + 2] = frame3DDecentrized[i / 3].Z;
+        }
 
-        Mat r = v * u.Transpose();
+        Mat pano3dDecentrMat = new(pano3DDecentrized.Length, 3, MatType.CV_32F, pano3DDecentrValues);
+        Mat frame3dDecentrMat = new(frame3DDecentrized.Length, 3, MatType.CV_32F, frame3DDecentrValues);
+
+        Mat h = frame3dDecentrMat.Transpose() * pano3dDecentrMat;
+
+        Mat u = new(), w = new(), vt = new();
+
+        SVD.Compute(h, w, u, vt);
+
+        Mat r = vt.Transpose() * u.Transpose();
 
         if (r.Determinant() < 0)
         {
-            Mat uLocal = new(), sLocal = new(), vLocal = new();
-            Cv2.SVDecomp(r, uLocal, sLocal, vLocal);
+            Debug.Log("Reflection detected");
+            Mat uLocal = new(), sLocal = new(), vtLocal = new();
+            SVD.Compute(r, sLocal, uLocal, vtLocal);
 
-            vLocal.Set(0, 2, -vLocal.At<float>(0, 2));
-            vLocal.Set(1, 2, -vLocal.At<float>(1, 2));
-            vLocal.Set(2, 2, -vLocal.At<float>(2, 2));
+            vtLocal.Set(2, 0, -vtLocal.At<float>(2, 0));
+            vtLocal.Set(2, 1, -vtLocal.At<float>(2, 1));
+            vtLocal.Set(2, 2, -vtLocal.At<float>(2, 2));
 
-            r = vLocal * uLocal.Transpose();
+            r = vtLocal.Transpose() * uLocal.Transpose();
         }
 
-        Mat t = -r * new Mat(1, 3, MatType.CV_32F, new[] { meanPano.X, meanPano.Y, meanPano.Z }) + new Mat(1, 3, MatType.CV_32F, new[] { meanFrame.X, meanFrame.Y, meanFrame.Z });
+        Mat t = -r * new Mat(3, 1, MatType.CV_32F, new[] { meanFrame.X, meanFrame.Y, meanFrame.Z }) + new Mat(3, 1, MatType.CV_32F, new[] { meanPano.X, meanPano.Y, meanPano.Z });
 
-        Mat rvec = new();
-        Cv2.Rodrigues(r, rvec);
+        //Mat rvec = new();
+        //Cv2.Rodrigues(r, rvec);
 
-        cam.transform.SetPositionAndRotation(new Vector3(t.At<float>(0), t.At<float>(1), t.At<float>(2)), Quaternion.Euler(rvec.At<float>(0), rvec.At<float>(1), rvec.At<float>(2)));
+        var pos = new Vector3(t.At<float>(0), t.At<float>(1), t.At<float>(2));
+        var rot = Quaternion.LookRotation(new Vector3(r.Get<float>(2, 0), r.Get<float>(2, 1), r.Get<float>(2, 2)), new Vector3(r.Get<float>(1, 0), r.Get<float>(1, 1), r.Get<float>(1, 2)));
+        cam.transform.SetPositionAndRotation(pos, rot);
     }
 
-    static Point3f GetDecartCoordsFromPanos(Point2f v, Mat spherePano, Mat sphereDepthPano)
+    static Point3f GetDecartCoordsFromPanos(Point2f v)
     {
-        var radius = Mathf.Max(sphereDepthPano.Get<Vec3w>(Mathf.RoundToInt(v.X), Mathf.RoundToInt(v.Y))[0] / 10f, 80f);
-        var polarCoords = new Vector3(radius, 2 * Mathf.PI * v.X / spherePano.Width, Mathf.PI * (spherePano.Height / 2 - v.Y) / spherePano.Height);
+        var radius = Mathf.Max(EnvDataFields.SphereDepthPano.Get<Vec3w>(Mathf.RoundToInt(v.Y), Mathf.RoundToInt(v.X))[0] / 10f, 80f);
+        var polarCoords = new Vector3(radius, 2 * Mathf.PI * v.X / EnvDataFields.SpherePano.Width, Mathf.PI * (EnvDataFields.SpherePano.Height - v.Y) / EnvDataFields.SpherePano.Height);
         return new Point3f(polarCoords.x * Mathf.Sin(polarCoords.y) * Mathf.Cos(polarCoords.z), polarCoords.x * Mathf.Sin(polarCoords.y) * Mathf.Sin(polarCoords.z), polarCoords.x * Mathf.Cos(polarCoords.z));
     }
 }

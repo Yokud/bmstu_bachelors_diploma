@@ -26,7 +26,7 @@ public class LightPosCalc : MonoBehaviour
 
     public void Calc()
     {
-        if (EnvDataFields.SpherePano is null || EnvDataFields.SphereDepthPano is null)
+        if (EnvDataFields.SpherePano == null || EnvDataFields.SphereDepthPano == null)
         {
             Debug.Log("Environment data are not loaded yet");
             ErrorText.text = "Error: Environment data are not loaded yet";
@@ -84,7 +84,7 @@ public class LightPosCalc : MonoBehaviour
         var decartCoords = new Vector3[centroids.Length];
         for (int i = 0; i < centroids.Length; i++)
         {
-            polarCoords[i] = new Vector3(radiuses[i], 2 * Mathf.PI * centroids[i].X / spherePanoWidth, Mathf.PI * (spherePanoHeight / 2 - centroids[i].Y) / spherePanoHeight);
+            polarCoords[i] = new Vector3(radiuses[i], 2 * Mathf.PI * centroids[i].X / spherePanoWidth, Mathf.PI * (spherePanoHeight - centroids[i].Y) / spherePanoHeight);
             decartCoords[i] = new Vector3(polarCoords[i].x * Mathf.Sin(polarCoords[i].y) * Mathf.Cos(polarCoords[i].z), polarCoords[i].x * Mathf.Sin(polarCoords[i].y) * Mathf.Sin(polarCoords[i].z), polarCoords[i].x * Mathf.Cos(polarCoords[i].z));
         }
 
@@ -98,7 +98,6 @@ public class LightPosCalc : MonoBehaviour
         }
 
         EnvDataFields.LightCoords = decartCoords.ToList();
-
         SceneManager.LoadScene("ARScene");
     }
 
@@ -112,8 +111,8 @@ public class LightPosCalc : MonoBehaviour
         float sumDepth = 0;
         var validPoints = 0;
 
-        for (int i = minX; i < maxX; i++)
-            for (int j = minY; j < maxY; j++)
+        for (int i = minY; i < maxY; i++)
+            for (int j = minX; j < maxX; j++)
             {
                 var val = EnvDataFields.SphereDepthPano.Get<Vec3w>(i, j)[0] / 10f; // mm -> cm
                 if (val != notValidValue)
