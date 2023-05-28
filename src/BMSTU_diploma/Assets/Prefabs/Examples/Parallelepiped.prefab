@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3183304651030707455}
   - component: {fileID: -5651691884786198510}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Parallelepiped
   m_TagString: Examples
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
