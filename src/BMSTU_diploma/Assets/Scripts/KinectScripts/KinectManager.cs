@@ -1,4 +1,5 @@
 using OpenCvSharp;
+using OpenCvSharp.XFeatures2D;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,7 +56,7 @@ public class KinectManager : MonoBehaviour
 
     Mat frame;
 
-    readonly AKAZE keyPointsAlg = AKAZE.Create();
+    readonly SIFT keyPointsAlg = SIFT.Create();
     Mat panoDescr = new();
     KeyPoint[] panoKeyPoints;
 
@@ -384,18 +385,18 @@ public class KinectManager : MonoBehaviour
         //KDTreeIndexParams indexParams = new KDTreeIndexParams(5);
         //SearchParams searchParams = new SearchParams(50);
         //var matcher = new FlannBasedMatcher(indexParams, searchParams);
-        var matcher = new BFMatcher(NormTypes.Hamming, true);
+        var matcher = new BFMatcher(NormTypes.L2, true);
         //var knnMatches = matcher.KnnMatch(frameDescr, panoDescr, 2);
         
         var matches = matcher.Match(frameDescr, panoDescr);
 
         var goodMatches = matches.OrderBy(x => x.Distance).Take(MaxMatchPointsCount).ToArray();
 
-        
+
 
         //List<Point2f> listOfMatchedPano = new();
         //List<Point2f> listOfMatchedFrame = new();
-        
+
         //List<DMatch> goodMatches = new();
         //List<KeyPoint> matchesPano = new();
         //List<KeyPoint> matchesFrame = new();
