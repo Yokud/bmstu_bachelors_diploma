@@ -1258,7 +1258,7 @@ MonoBehaviour:
   PlaneGrid: {fileID: 287486370}
   Background: {fileID: 1477954019}
   MinMatchPointsCount: 4
-  MaxMatchPointsCount: 15
+  MaxMatchPointsCount: 20
   MeshHeight: 320
   CalibrationText: {fileID: 29219033}
 --- !u!81 &2093910741

@@ -1,10 +1,8 @@
 using OpenCvSharp;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -57,7 +55,7 @@ public class KinectManager : MonoBehaviour
 
     Mat frame;
 
-    ORB keyPointsAlg = ORB.Create();
+    readonly AKAZE keyPointsAlg = AKAZE.Create();
     Mat panoDescr = new();
     KeyPoint[] panoKeyPoints;
 
@@ -383,43 +381,73 @@ public class KinectManager : MonoBehaviour
 
         keyPointsAlg.DetectAndCompute(frame, new Mat(), out KeyPoint[] frameKeyPoints, frameDescr);
 
-        var matcher = new BFMatcher(NormTypes.Hamming, true);//DescriptorMatcher.Create("BruteForce-Hamming");
+        //KDTreeIndexParams indexParams = new KDTreeIndexParams(5);
+        //SearchParams searchParams = new SearchParams(50);
+        //var matcher = new FlannBasedMatcher(indexParams, searchParams);
+        var matcher = new BFMatcher(NormTypes.Hamming, true);
         //var knnMatches = matcher.KnnMatch(frameDescr, panoDescr, 2);
-
+        
         var matches = matcher.Match(frameDescr, panoDescr);
 
         var goodMatches = matches.OrderBy(x => x.Distance).Take(MaxMatchPointsCount).ToArray();
 
-        //Mat testImg = new Mat();
+        
+
+        //List<Point2f> listOfMatchedPano = new();
+        //List<Point2f> listOfMatchedFrame = new();
+        
+        //List<DMatch> goodMatches = new();
+        //List<KeyPoint> matchesPano = new();
+        //List<KeyPoint> matchesFrame = new();
+        //var nn_match_ratio = 0.7;
+        //for (int i = 0; i < matches.Length; i++)
+        //{
+        //    var match = matches[i];
+        //    if (match[0].Distance < nn_match_ratio * match[1].Distance)
+        //    {
+        //        goodMatches.Add(match[0]);
+        //        matchesPano.Add(panoKeyPoints[match[0].TrainIdx]);
+        //        matchesFrame.Add(frameKeyPoints[match[0].QueryIdx]);
+        //    }
+        //    //listOfMatchedFrame.Add(frameKeyPoints[goodMatches[i].QueryIdx].Pt);
+        //    //listOfMatchedPano.Add(panoKeyPoints[goodMatches[i].TrainIdx].Pt);
+        //}
+
+        //List<DMatch> goodMatches = new();
+        //var inlier_threshold = 2.5;
+        //for (int i = 0; i < matchesFoundPano.Count; i++)
+        //{
+
+        //}
+
+        //var goodMatchesArr = goodMatches.OrderBy(x => x.Distance).Take(MaxMatchPointsCount).ToArray();
+        //var matchesPano = goodMatchesArr.Select(m => panoKeyPoints[m.TrainIdx]).ToArray();
+        //var matchesFrame = goodMatchesArr.Select(m => frameKeyPoints[m.QueryIdx]).ToArray();
+
+        //Mat testImg = new();
         //Cv2.DrawMatches(frame, frameKeyPoints, EnvDataFields.SpherePano, panoKeyPoints, goodMatches, testImg);
         //LightPosCalc.SavePng(testImg, "D:\\test_kp.png");
 
-        List<Point2f> listOfMatchedPano = new();
-        List<Point2f> listOfMatchedFrame = new();
-        for (int i = 0; i < goodMatches.Length; i++)
-        {
-            listOfMatchedFrame.Add(frameKeyPoints[goodMatches[i].QueryIdx].Pt);
-            listOfMatchedPano.Add(panoKeyPoints[goodMatches[i].TrainIdx].Pt);
-        }
-
-        if (listOfMatchedPano.Count < MinMatchPointsCount)
+        if (goodMatches.Length < MinMatchPointsCount)
         {
             Debug.Log("Too less match points");
             return;
         }
 
-        var matchedPoints = listOfMatchedPano.Count;
-        List<Point3f> pano3D = new List<Point3f>(matchedPoints);
-        List<Point2f> sortedMathedFrame = new List<Point2f>(matchedPoints);
-        var conversionCameraToWorldMatrix = cam.projectionMatrix.inverse;
+        var matchesPano = goodMatches.Select(m => panoKeyPoints[m.TrainIdx]).ToArray();
+        var matchesFrame = goodMatches.Select(m => frameKeyPoints[m.QueryIdx]).ToArray();
+
+        var matchedPoints = goodMatches.Length;
+        List<Point3f> pano3D = new(matchedPoints);
+        List<Point2f> sortedMatñhedFrame = new(matchedPoints);
         for (int i = 0; i < matchedPoints; i++)
         {
             //pano3D[i] = GetDecartCoordsFromPanos(listOfMatchedPano[i]);
-            var pano3DPoint = GetDecartCoordsFromPanos(listOfMatchedPano[i], 4);
+            var pano3DPoint = GetDecartCoordsFromPanos(matchesPano[i].Pt, 4);
             if (!(pano3DPoint.X == 0 && pano3DPoint.Y == 0 && pano3DPoint.Z == 0))
             {
                 pano3D.Add(pano3DPoint);
-                sortedMathedFrame.Add(listOfMatchedFrame[i]);
+                sortedMatñhedFrame.Add(matchesFrame[i].Pt);
             }
         }
 
@@ -430,43 +458,44 @@ public class KinectManager : MonoBehaviour
         }
 
         matchedPoints = pano3D.Count;
-        PointsToMat(pano3D, out Mat pano3DMat);
 
         var cameraMatrix = new double[3, 3];
         cameraMatrix[0, 0] = Width;
-        cameraMatrix[1, 1] = Height;
+        cameraMatrix[1, 1] = Width;
         cameraMatrix[0, 2] = Width / 2;
         cameraMatrix[1, 2] = Height / 2;
         cameraMatrix[2, 2] = 1;
 
         var distCoefs = Enumerable.Repeat<double>(0, 5);
 
-        Cv2.SolvePnPRansac(pano3D, sortedMathedFrame, cameraMatrix, distCoefs, out double[] rvec, out double[] tvec);
+        Cv2.SolvePnPRansac(pano3D, sortedMatñhedFrame, cameraMatrix, distCoefs, out double[] rvec, out double[] tvec);
 
-        var pos = new Vector3((float)tvec[0], -(float)tvec[1], (float)tvec[2]);
+        var t = new Vector3((float)tvec[0], (float)tvec[1], (float)tvec[2]);
 
         Cv2.Rodrigues(rvec, out double[,] r);
 
-        var x_axis = new Vector3((float)r[0, 0], (float)r[0, 1], (float)r[0, 2]);
-        var y_axis = new Vector3((float)r[1, 0], (float)r[1, 1], (float)r[1, 2]);
-        var z_axis = new Vector3((float)r[2, 0], (float)r[2, 1], (float)r[2, 2]);
+        Matrix4x4 R = new();
+        R.SetRow(0, new((float)r[0, 0], (float)r[0, 1], (float)r[0, 2]));
+        R.SetRow(1, new((float)r[1, 0], (float)r[1, 1], (float)r[1, 2]));
+        R.SetRow(2, new((float)r[2, 0], (float)r[2, 1], (float)r[2, 2]));
+        R.SetRow(3, new(0, 0, 0, 1));
 
-        var rot = Quaternion.LookRotation(z_axis, -y_axis);
-        cam.transform.SetPositionAndRotation(pos, rot);
-    }
+        R = R.transpose;
 
-    private static void PointsToMat(IList<Point3f> points, out Mat Mat)
-    {
-        float[] pointsValues = new float[points.Count * 3];
+        Matrix4x4 negativeMatrix = new();
+        negativeMatrix.SetRow(0, new Vector4(-1, 0, 0));
+        negativeMatrix.SetRow(1, new Vector4(0, -1, 0));
+        negativeMatrix.SetRow(2, new Vector4(0, 0, -1));
+        negativeMatrix.SetRow(3, new Vector4(0, 0, 0, 1));
+        var pos = negativeMatrix * R * t;
 
-        for (int i = 0; i < points.Count * 3; i += 3)
-        {
-            pointsValues[i] = points[i / 3].X;
-            pointsValues[i + 1] = points[i / 3].Y;
-            pointsValues[i + 2] = points[i / 3].Z;
-        }
+        //Quaternion Q = R.rotation;
+        //cam.transform.SetPositionAndRotation(Vector3.zero, new Quaternion(-Q.x, Q.y, -Q.z, Q.w));
 
-        Mat = new(points.Count, 1, MatType.CV_32FC3, pointsValues);
+        var y_axis = new Vector3(R[0, 1], R[1, 1], R[2, 1]);
+        var z_axis = new Vector3(R[0, 2], R[1, 2], R[2, 2]);
+
+        cam.transform.SetPositionAndRotation(pos, Quaternion.LookRotation(z_axis, -y_axis));
     }
 
     static Point3f GetDecartCoordsFromPanos(Point2f v, int squareRad = 1, int notValidValue = 0)

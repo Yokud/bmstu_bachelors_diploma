@@ -111,8 +111,8 @@ public class LightPosCalc : MonoBehaviour
         float sumDepth = 0;
         var validPoints = 0;
 
-        for (int i = minY; i < maxY; i++)
-            for (int j = minX; j < maxX; j++)
+        for (int i = minY; i <= maxY; i++)
+            for (int j = minX; j <= maxX; j++)
             {
                 var val = EnvDataFields.SphereDepthPano.Get<Vec3w>(i, j)[0] / 10f; // mm -> cm
                 if (val != notValidValue)
