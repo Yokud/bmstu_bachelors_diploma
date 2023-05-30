@@ -32,6 +32,8 @@ public class ExamplesManager : MonoBehaviour
         }
     }
 
+    public bool HasSelectedExample => selectedExample != null;
+
     private void SpawnExamples()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))

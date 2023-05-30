@@ -55,11 +55,11 @@ public class KinectManager : MonoBehaviour
 
     Image bg;
 
-    Mat frame;
+    //Mat frame;
 
-    readonly SIFT keyPointsAlg = SIFT.Create();
-    Mat panoDescr = new();
-    KeyPoint[] panoKeyPoints;
+    //readonly SIFT keyPointsAlg = SIFT.Create();
+    //Mat panoDescr = new();
+    //KeyPoint[] panoKeyPoints;
 
     public Text CalibrationText;
 
@@ -180,7 +180,7 @@ public class KinectManager : MonoBehaviour
         var rt = Background.GetComponent<RectTransform>();
         rt.sizeDelta = new Vector2(bgWidth, bgHeight);
 
-        keyPointsAlg.DetectAndCompute(EnvDataFields.SpherePano, new Mat(), out panoKeyPoints, panoDescr);
+        //keyPointsAlg.DetectAndCompute(EnvDataFields.SpherePano, new Mat(), out panoKeyPoints, panoDescr);
 
         SetupArrays();
     }
@@ -200,7 +200,7 @@ public class KinectManager : MonoBehaviour
             {
                 UpdateColorMap();
                 UpdateBackground();
-                UpdateCameraOrientation();
+                //UpdateCameraOrientation();
             }
         }
     }
@@ -371,162 +371,163 @@ public class KinectManager : MonoBehaviour
     {
         ColorTexture.SetPixels32(colorImage);
         ColorTexture.Apply();
-        frame = OpenCvSharp.Unity.TextureToMat(ColorTexture);
+        //frame = OpenCvSharp.Unity.TextureToMat(ColorTexture);
     }
 
-    void UpdateCameraOrientation()
-    {
-        if (EnvDataFields.SpherePano == null || EnvDataFields.SphereDepthPano == null)
-            return;
+    // Îñòàâëåííî íà ëó÷øèå âðåìåíà))
+    //void UpdateCameraOrientation()
+    //{
+    //    if (EnvDataFields.SpherePano == null || EnvDataFields.SphereDepthPano == null)
+    //        return;
 
-        Mat frameDescr = new();
+    //    Mat frameDescr = new();
 
-        keyPointsAlg.DetectAndCompute(frame, new Mat(), out KeyPoint[] frameKeyPoints, frameDescr);
+    //    keyPointsAlg.DetectAndCompute(frame, new Mat(), out KeyPoint[] frameKeyPoints, frameDescr);
 
-        KDTreeIndexParams indexParams = new KDTreeIndexParams(5);
-        SearchParams searchParams = new SearchParams(50);
-        var matcher = new FlannBasedMatcher(indexParams, searchParams);
+    //    KDTreeIndexParams indexParams = new KDTreeIndexParams(5);
+    //    SearchParams searchParams = new SearchParams(50);
+    //    var matcher = new FlannBasedMatcher(indexParams, searchParams);
 
-        //var matcher = new BFMatcher(NormTypes.L2, true);
-        //var knnMatches = matcher.KnnMatch(frameDescr, panoDescr, 2);
+    //    //var matcher = new BFMatcher(NormTypes.L2, true);
+    //    //var knnMatches = matcher.KnnMatch(frameDescr, panoDescr, 2);
 
-        var matches = matcher.Match(frameDescr, panoDescr);
+    //    var matches = matcher.Match(frameDescr, panoDescr);
 
-        var goodMatches = matches.OrderBy(x => x.Distance).Take(MaxMatchPointsCount).ToArray();
+    //    var goodMatches = matches.OrderBy(x => x.Distance).Take(MaxMatchPointsCount).ToArray();
 
 
 
-        //List<Point2f> listOfMatchedPano = new();
-        //List<Point2f> listOfMatchedFrame = new();
+    //    //List<Point2f> listOfMatchedPano = new();
+    //    //List<Point2f> listOfMatchedFrame = new();
 
-        //List<DMatch> goodMatches = new();
-        //List<KeyPoint> matchesPano = new();
-        //List<KeyPoint> matchesFrame = new();
-        //var nn_match_ratio = 0.7;
-        //for (int i = 0; i < matches.Length; i++)
-        //{
-        //    var match = matches[i];
-        //    if (match[0].Distance < nn_match_ratio * match[1].Distance)
-        //    {
-        //        goodMatches.Add(match[0]);
-        //        matchesPano.Add(panoKeyPoints[match[0].TrainIdx]);
-        //        matchesFrame.Add(frameKeyPoints[match[0].QueryIdx]);
-        //    }
-        //    //listOfMatchedFrame.Add(frameKeyPoints[goodMatches[i].QueryIdx].Pt);
-        //    //listOfMatchedPano.Add(panoKeyPoints[goodMatches[i].TrainIdx].Pt);
-        //}
+    //    //List<DMatch> goodMatches = new();
+    //    //List<KeyPoint> matchesPano = new();
+    //    //List<KeyPoint> matchesFrame = new();
+    //    //var nn_match_ratio = 0.7;
+    //    //for (int i = 0; i < matches.Length; i++)
+    //    //{
+    //    //    var match = matches[i];
+    //    //    if (match[0].Distance < nn_match_ratio * match[1].Distance)
+    //    //    {
+    //    //        goodMatches.Add(match[0]);
+    //    //        matchesPano.Add(panoKeyPoints[match[0].TrainIdx]);
+    //    //        matchesFrame.Add(frameKeyPoints[match[0].QueryIdx]);
+    //    //    }
+    //    //    //listOfMatchedFrame.Add(frameKeyPoints[goodMatches[i].QueryIdx].Pt);
+    //    //    //listOfMatchedPano.Add(panoKeyPoints[goodMatches[i].TrainIdx].Pt);
+    //    //}
 
-        //List<DMatch> goodMatches = new();
-        //var inlier_threshold = 2.5;
-        //for (int i = 0; i < matchesFoundPano.Count; i++)
-        //{
+    //    //List<DMatch> goodMatches = new();
+    //    //var inlier_threshold = 2.5;
+    //    //for (int i = 0; i < matchesFoundPano.Count; i++)
+    //    //{
 
-        //}
+    //    //}
 
-        //var goodMatchesArr = goodMatches.OrderBy(x => x.Distance).Take(MaxMatchPointsCount).ToArray();
-        //var matchesPano = goodMatchesArr.Select(m => panoKeyPoints[m.TrainIdx]).ToArray();
-        //var matchesFrame = goodMatchesArr.Select(m => frameKeyPoints[m.QueryIdx]).ToArray();
+    //    //var goodMatchesArr = goodMatches.OrderBy(x => x.Distance).Take(MaxMatchPointsCount).ToArray();
+    //    //var matchesPano = goodMatchesArr.Select(m => panoKeyPoints[m.TrainIdx]).ToArray();
+    //    //var matchesFrame = goodMatchesArr.Select(m => frameKeyPoints[m.QueryIdx]).ToArray();
 
-        Mat testImg = new();
-        Cv2.DrawMatches(frame, frameKeyPoints, EnvDataFields.SpherePano, panoKeyPoints, goodMatches, testImg);
-        LightPosCalc.SavePng(testImg, "D:\\test_kp.png");
+    //    Mat testImg = new();
+    //    Cv2.DrawMatches(frame, frameKeyPoints, EnvDataFields.SpherePano, panoKeyPoints, goodMatches, testImg);
+    //    LightPosCalc.SavePng(testImg, "D:\\test_kp.png");
 
-        if (goodMatches.Length < MinMatchPointsCount)
-        {
-            Debug.Log("Too less match points");
-            return;
-        }
+    //    if (goodMatches.Length < MinMatchPointsCount)
+    //    {
+    //        Debug.Log("Too less match points");
+    //        return;
+    //    }
 
-        var matchesPano = goodMatches.Select(m => panoKeyPoints[m.TrainIdx]).ToArray();
-        var matchesFrame = goodMatches.Select(m => frameKeyPoints[m.QueryIdx]).ToArray();
+    //    var matchesPano = goodMatches.Select(m => panoKeyPoints[m.TrainIdx]).ToArray();
+    //    var matchesFrame = goodMatches.Select(m => frameKeyPoints[m.QueryIdx]).ToArray();
 
-        var matchedPoints = goodMatches.Length;
-        List<Point3f> pano3D = new(matchedPoints);
-        List<Point2f> sortedMatñhedFrame = new(matchedPoints);
-        for (int i = 0; i < matchedPoints; i++)
-        {
-            //pano3D[i] = GetDecartCoordsFromPanos(listOfMatchedPano[i]);
-            var pano3DPoint = GetDecartCoordsFromPanos(matchesPano[i].Pt, 4);
-            if (!(pano3DPoint.X == 0 && pano3DPoint.Y == 0 && pano3DPoint.Z == 0))
-            {
-                pano3D.Add(pano3DPoint);
-                sortedMatñhedFrame.Add(matchesFrame[i].Pt);
-            }
-        }
+    //    var matchedPoints = goodMatches.Length;
+    //    List<Point3f> pano3D = new(matchedPoints);
+    //    List<Point2f> sortedMatñhedFrame = new(matchedPoints);
+    //    for (int i = 0; i < matchedPoints; i++)
+    //    {
+    //        //pano3D[i] = GetDecartCoordsFromPanos(listOfMatchedPano[i]);
+    //        var pano3DPoint = GetDecartCoordsFromPanos(matchesPano[i].Pt, 4);
+    //        if (!(pano3DPoint.X == 0 && pano3DPoint.Y == 0 && pano3DPoint.Z == 0))
+    //        {
+    //            pano3D.Add(pano3DPoint);
+    //            sortedMatñhedFrame.Add(matchesFrame[i].Pt);
+    //        }
+    //    }
 
-        if (pano3D.Count < MinMatchPointsCount)
-        {
-            Debug.Log("Too less 3D match points");
-            return;
-        }
+    //    if (pano3D.Count < MinMatchPointsCount)
+    //    {
+    //        Debug.Log("Too less 3D match points");
+    //        return;
+    //    }
 
-        matchedPoints = pano3D.Count;
+    //    matchedPoints = pano3D.Count;
 
-        var cameraMatrix = new double[3, 3];
-        cameraMatrix[0, 0] = Width;
-        cameraMatrix[1, 1] = Width;
-        cameraMatrix[0, 2] = Width / 2;
-        cameraMatrix[1, 2] = Height / 2;
-        cameraMatrix[2, 2] = 1;
+    //    var cameraMatrix = new double[3, 3];
+    //    cameraMatrix[0, 0] = Width;
+    //    cameraMatrix[1, 1] = Width;
+    //    cameraMatrix[0, 2] = Width / 2;
+    //    cameraMatrix[1, 2] = Height / 2;
+    //    cameraMatrix[2, 2] = 1;
 
-        var distCoefs = Enumerable.Repeat<double>(0, 5);
+    //    var distCoefs = Enumerable.Repeat<double>(0, 5);
 
-        Cv2.SolvePnPRansac(pano3D, sortedMatñhedFrame, cameraMatrix, distCoefs, out double[] rvec, out double[] tvec);
+    //    Cv2.SolvePnPRansac(pano3D, sortedMatñhedFrame, cameraMatrix, distCoefs, out double[] rvec, out double[] tvec);
 
-        var t = new Vector3((float)tvec[0], (float)tvec[1], (float)tvec[2]);
+    //    var t = new Vector3((float)tvec[0], (float)tvec[1], (float)tvec[2]);
 
-        Cv2.Rodrigues(rvec, out double[,] r);
+    //    Cv2.Rodrigues(rvec, out double[,] r);
 
-        Matrix4x4 R = new();
-        R.SetRow(0, new((float)r[0, 0], (float)r[0, 1], (float)r[0, 2]));
-        R.SetRow(1, new((float)r[1, 0], (float)r[1, 1], (float)r[1, 2]));
-        R.SetRow(2, new((float)r[2, 0], (float)r[2, 1], (float)r[2, 2]));
-        R.SetRow(3, new(0, 0, 0, 1));
+    //    Matrix4x4 R = new();
+    //    R.SetRow(0, new((float)r[0, 0], (float)r[0, 1], (float)r[0, 2]));
+    //    R.SetRow(1, new((float)r[1, 0], (float)r[1, 1], (float)r[1, 2]));
+    //    R.SetRow(2, new((float)r[2, 0], (float)r[2, 1], (float)r[2, 2]));
+    //    R.SetRow(3, new(0, 0, 0, 1));
 
-        R = R.transpose;
+    //    R = R.transpose;
 
-        Matrix4x4 negativeMatrix = new();
-        negativeMatrix.SetRow(0, new Vector4(-1, 0, 0));
-        negativeMatrix.SetRow(1, new Vector4(0, -1, 0));
-        negativeMatrix.SetRow(2, new Vector4(0, 0, -1));
-        negativeMatrix.SetRow(3, new Vector4(0, 0, 0, 1));
-        var pos = negativeMatrix * R * t;
+    //    Matrix4x4 negativeMatrix = new();
+    //    negativeMatrix.SetRow(0, new Vector4(-1, 0, 0));
+    //    negativeMatrix.SetRow(1, new Vector4(0, -1, 0));
+    //    negativeMatrix.SetRow(2, new Vector4(0, 0, -1));
+    //    negativeMatrix.SetRow(3, new Vector4(0, 0, 0, 1));
+    //    var pos = negativeMatrix * R * t;
 
-        //Quaternion Q = R.rotation;
-        //cam.transform.SetPositionAndRotation(Vector3.zero, new Quaternion(-Q.x, Q.y, -Q.z, Q.w));
+    //    //Quaternion Q = R.rotation;
+    //    //cam.transform.SetPositionAndRotation(Vector3.zero, new Quaternion(-Q.x, Q.y, -Q.z, Q.w));
 
-        var y_axis = new Vector3(R[0, 1], R[1, 1], R[2, 1]);
-        var z_axis = new Vector3(R[0, 2], R[1, 2], R[2, 2]);
+    //    var y_axis = new Vector3(R[0, 1], R[1, 1], R[2, 1]);
+    //    var z_axis = new Vector3(R[0, 2], R[1, 2], R[2, 2]);
 
-        cam.transform.SetPositionAndRotation(pos, Quaternion.LookRotation(z_axis, -y_axis));
-    }
+    //    cam.transform.SetPositionAndRotation(pos, Quaternion.LookRotation(z_axis, -y_axis));
+    //}
 
-    static Point3f GetDecartCoordsFromPanos(Point2f v, int squareRad = 1, int notValidValue = 0)
-    {
-        if (squareRad < 1)
-            return new Point3f(0, 0, 0);
+    //static Point3f GetDecartCoordsFromPanos(Point2f v, int squareRad = 1, int notValidValue = 0)
+    //{
+    //    if (squareRad < 1)
+    //        return new Point3f(0, 0, 0);
 
-        var y = Mathf.RoundToInt(v.Y);
-        var x = Mathf.RoundToInt(v.X);
+    //    var y = Mathf.RoundToInt(v.Y);
+    //    var x = Mathf.RoundToInt(v.X);
 
-        var sumDepth = 0f;
-        var validPoints = 0;
-        for (int i = Math.Max(y - squareRad, 0); i <= Math.Min(y + squareRad, EnvDataFields.SphereDepthPano.Height - 1); i++)
-            for (int j = Math.Max(x - squareRad, 0); j <= Math.Min(x + squareRad, EnvDataFields.SphereDepthPano.Width - 1); j++)
-            {
-                var val = EnvDataFields.SphereDepthPano.Get<Vec3w>(i, j)[0];
-                if (val != notValidValue)
-                {
-                    sumDepth += val;
-                    validPoints++;
-                }
-            }
+    //    var sumDepth = 0f;
+    //    var validPoints = 0;
+    //    for (int i = Math.Max(y - squareRad, 0); i <= Math.Min(y + squareRad, EnvDataFields.SphereDepthPano.Height - 1); i++)
+    //        for (int j = Math.Max(x - squareRad, 0); j <= Math.Min(x + squareRad, EnvDataFields.SphereDepthPano.Width - 1); j++)
+    //        {
+    //            var val = EnvDataFields.SphereDepthPano.Get<Vec3w>(i, j)[0];
+    //            if (val != notValidValue)
+    //            {
+    //                sumDepth += val;
+    //                validPoints++;
+    //            }
+    //        }
 
-        if (validPoints == 0)
-            return new Point3f(0, 0, 0);
+    //    if (validPoints == 0)
+    //        return new Point3f(0, 0, 0);
 
-        var radius = (sumDepth / validPoints) / 10f;
-        var polarCoords = new Vector3(radius, 2 * Mathf.PI * v.X / EnvDataFields.SpherePano.Width, Mathf.PI * (EnvDataFields.SpherePano.Height - v.Y) / EnvDataFields.SpherePano.Height);
-        return new Point3f(polarCoords.x * Mathf.Sin(polarCoords.y) * Mathf.Cos(polarCoords.z), polarCoords.x * Mathf.Sin(polarCoords.y) * Mathf.Sin(polarCoords.z), polarCoords.x * Mathf.Cos(polarCoords.z));
-    }
+    //    var radius = (sumDepth / validPoints) / 10f;
+    //    var polarCoords = new Vector3(radius, 2 * Mathf.PI * v.X / EnvDataFields.SpherePano.Width, Mathf.PI * (EnvDataFields.SpherePano.Height - v.Y) / EnvDataFields.SpherePano.Height);
+    //    return new Point3f(polarCoords.x * Mathf.Sin(polarCoords.y) * Mathf.Cos(polarCoords.z), polarCoords.x * Mathf.Sin(polarCoords.y) * Mathf.Sin(polarCoords.z), polarCoords.x * Mathf.Cos(polarCoords.z));
+    //}
 }

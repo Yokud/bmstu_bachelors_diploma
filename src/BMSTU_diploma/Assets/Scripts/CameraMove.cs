@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-[AddComponentMenu("Control Script/Keyboard Input")]
-public class KeyboardInput : MonoBehaviour
+public class CameraMove : MonoBehaviour
 {
     public float speed = 60f;
 
+    public GameObject SceneManager;
+
     CharacterController _charController;
+    ExamplesManager _examplesManager;
     // Start is called before the first frame update
     void Start()
     {
         _charController = GetComponent<CharacterController>();
+        _examplesManager = SceneManager.GetComponent<ExamplesManager>();
     }
 
     // Update is called once per frame
@@ -36,7 +39,11 @@ public class KeyboardInput : MonoBehaviour
         movement = Vector3.ClampMagnitude(movement, speed);
         
         movement *= Time.deltaTime;
-        transform.Translate(movement, Space.World);
-        _charController.Move(movement);
+
+        if (!_examplesManager.HasSelectedExample)
+        {
+            transform.Translate(movement, Space.World);
+            _charController.Move(movement);
+        }
     }
 }
