@@ -207,8 +207,8 @@ public class KinectManager : MonoBehaviour
 
     private void UpdateBackground()
     {
-        var bgPos = cam.transform.TransformPoint(0, 0, 400);
-        Background.transform.SetPositionAndRotation(bgPos, Quaternion.LookRotation(cam.transform.forward, cam.transform.up));
+        //var bgPos = cam.transform.TransformPoint(0, 0, 400);
+        //Background.transform.SetPositionAndRotation(bgPos, Quaternion.LookRotation(cam.transform.forward, cam.transform.up));
 
         if (bg != null)
             bg.sprite = Sprite.Create(ColorTexture, new UnityEngine.Rect(0, 0, Width, Height), new Vector2());
@@ -276,11 +276,9 @@ public class KinectManager : MonoBehaviour
 
     void UpdateMesh()
     {
+        //var pgPos = cam.transform.TransformPoint(0, 0, 80);
+        //PlaneGrid.transform.SetPositionAndRotation(pgPos, Quaternion.LookRotation(cam.transform.forward, cam.transform.up));
 
-        var pgPos = cam.transform.TransformPoint(0, 0, 80);
-        PlaneGrid.transform.SetPositionAndRotation(pgPos, Quaternion.LookRotation(cam.transform.forward, cam.transform.up));
-
-        var camZ = cam.transform.position.z;
         var planeGridZ = 80;
         var conversionCameraToPlaneGridMatrix = PlaneGrid.transform.worldToLocalMatrix * cam.cameraToWorldMatrix * cam.projectionMatrix.inverse;
         Parallel.For(0, mapSize, (i) =>

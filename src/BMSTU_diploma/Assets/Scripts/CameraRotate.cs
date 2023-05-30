@@ -10,7 +10,15 @@ public class CameraRotate : MonoBehaviour
     public float minVert = -90f;
     public float maxVert = 90f;
 
+    public GameObject SceneManager;
+
     float _rotationX = 0;
+    ExamplesManager _examplesManager;
+
+    void Start()
+    {
+        _examplesManager = SceneManager.GetComponent<ExamplesManager>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -31,6 +39,9 @@ public class CameraRotate : MonoBehaviour
 
         float rotationY = transform.localEulerAngles.y + deltaX;
 
-        transform.localEulerAngles = new Vector3(_rotationX, rotationY, 0);
+        if (!_examplesManager.HasSelectedExample)
+            transform.localEulerAngles = new Vector3(_rotationX, rotationY, 0);
+        else
+            _rotationX = 0;
     }
 }
