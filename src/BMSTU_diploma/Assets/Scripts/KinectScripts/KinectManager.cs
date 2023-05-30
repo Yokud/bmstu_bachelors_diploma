@@ -1,4 +1,5 @@
 using OpenCvSharp;
+using OpenCvSharp.Flann;
 using OpenCvSharp.XFeatures2D;
 using System;
 using System.Collections.Generic;
@@ -382,12 +383,13 @@ public class KinectManager : MonoBehaviour
 
         keyPointsAlg.DetectAndCompute(frame, new Mat(), out KeyPoint[] frameKeyPoints, frameDescr);
 
-        //KDTreeIndexParams indexParams = new KDTreeIndexParams(5);
-        //SearchParams searchParams = new SearchParams(50);
-        //var matcher = new FlannBasedMatcher(indexParams, searchParams);
-        var matcher = new BFMatcher(NormTypes.L2, true);
+        KDTreeIndexParams indexParams = new KDTreeIndexParams(5);
+        SearchParams searchParams = new SearchParams(50);
+        var matcher = new FlannBasedMatcher(indexParams, searchParams);
+
+        //var matcher = new BFMatcher(NormTypes.L2, true);
         //var knnMatches = matcher.KnnMatch(frameDescr, panoDescr, 2);
-        
+
         var matches = matcher.Match(frameDescr, panoDescr);
 
         var goodMatches = matches.OrderBy(x => x.Distance).Take(MaxMatchPointsCount).ToArray();
@@ -425,9 +427,9 @@ public class KinectManager : MonoBehaviour
         //var matchesPano = goodMatchesArr.Select(m => panoKeyPoints[m.TrainIdx]).ToArray();
         //var matchesFrame = goodMatchesArr.Select(m => frameKeyPoints[m.QueryIdx]).ToArray();
 
-        //Mat testImg = new();
-        //Cv2.DrawMatches(frame, frameKeyPoints, EnvDataFields.SpherePano, panoKeyPoints, goodMatches, testImg);
-        //LightPosCalc.SavePng(testImg, "D:\\test_kp.png");
+        Mat testImg = new();
+        Cv2.DrawMatches(frame, frameKeyPoints, EnvDataFields.SpherePano, panoKeyPoints, goodMatches, testImg);
+        LightPosCalc.SavePng(testImg, "D:\\test_kp.png");
 
         if (goodMatches.Length < MinMatchPointsCount)
         {
