@@ -3,6 +3,7 @@ using OpenCvSharp.Flann;
 using OpenCvSharp.XFeatures2D;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -102,8 +103,8 @@ public class KinectManager : MonoBehaviour
         catch (DllNotFoundException e)
         {
             string message = "Please check the Kinect SDK installation.";
-            Debug.LogError(message);
-            Debug.LogError(e.ToString());
+            UnityEngine.Debug.LogError(message);
+            UnityEngine.Debug.LogError(e.ToString());
             if (CalibrationText != null)
             {
                 CalibrationText.color = Color.red;
@@ -114,8 +115,8 @@ public class KinectManager : MonoBehaviour
         catch (Exception e)
         {
             string message = "Kinect status: " + e.Message + " - " + KinectWrapper.GetNuiErrorString(hr);
-            Debug.LogError(message);
-            Debug.LogError(e.ToString());
+            UnityEngine.Debug.LogError(message);
+            UnityEngine.Debug.LogError(e.ToString());
             if (CalibrationText != null)
             {
                 CalibrationText.color = Color.red;
@@ -141,7 +142,7 @@ public class KinectManager : MonoBehaviour
             CalibrationText.text = "Kinect status: Kinect initialized";
         }
 
-        Debug.Log("Kinect initialized.");
+        UnityEngine.Debug.Log("Kinect initialized.");
 
         kinectInitialized = true;
     }
@@ -190,6 +191,7 @@ public class KinectManager : MonoBehaviour
     {
         if (kinectInitialized)
         {
+            Stopwatch sw = Stopwatch.StartNew();
             if (depthStreamHandle != IntPtr.Zero && KinectWrapper.PollDepth(depthStreamHandle, KinectWrapper.Constants.IsNearMode, ref depthMap))
             {
                 NormalizeDepthValues();
@@ -202,6 +204,10 @@ public class KinectManager : MonoBehaviour
                 UpdateBackground();
                 //UpdateCameraOrientation();
             }
+
+            sw.Stop();
+
+            UnityEngine.Debug.Log("Time:" + sw.ElapsedMilliseconds);
         }
     }
 
@@ -279,6 +285,7 @@ public class KinectManager : MonoBehaviour
         //var pgPos = cam.transform.TransformPoint(0, 0, 80);
         //PlaneGrid.transform.SetPositionAndRotation(pgPos, Quaternion.LookRotation(cam.transform.forward, cam.transform.up));
 
+        //var max = NormalizedDepthValues.Max();
         var planeGridZ = 80;
         var conversionCameraToPlaneGridMatrix = PlaneGrid.transform.worldToLocalMatrix * cam.cameraToWorldMatrix * cam.projectionMatrix.inverse;
         Parallel.For(0, mapSize, (i) =>

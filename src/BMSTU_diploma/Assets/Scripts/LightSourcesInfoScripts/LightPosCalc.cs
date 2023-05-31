@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Diagnostics;
 
 public class LightPosCalc : MonoBehaviour
 {
@@ -26,9 +27,11 @@ public class LightPosCalc : MonoBehaviour
 
     public void Calc()
     {
+        Stopwatch sw = Stopwatch.StartNew();
+
         if (EnvDataFields.SpherePano == null || EnvDataFields.SphereDepthPano == null)
         {
-            Debug.Log("Environment data are not loaded yet");
+            UnityEngine.Debug.Log("Environment data are not loaded yet");
             ErrorText.text = "Error: Environment data are not loaded yet";
             return;
         }
@@ -42,7 +45,7 @@ public class LightPosCalc : MonoBehaviour
 
         if (maxGray / avgGray < 1.5)
         {
-            Debug.Log("Can't calculate light source positions, because the sphere map has no observable difference between point light and ambient light");
+            UnityEngine.Debug.Log("Can't calculate light source positions, because the sphere map has no observable difference between point light and ambient light");
             ErrorText.text = "Error: Can't calculate light source positions, because the sphere map has no observable difference between point light and ambient light";
             return;
         }
@@ -92,12 +95,17 @@ public class LightPosCalc : MonoBehaviour
 
         if (!decartCoords.Any())
         {
-            Debug.Log("Can't find any light source");
+            UnityEngine.Debug.Log("Can't find any light source");
             ErrorText.text = "Error: Can't find any light source";
             return;
         }
 
         EnvDataFields.LightCoords = decartCoords.ToList();
+
+        sw.Stop();
+
+        UnityEngine.Debug.Log(sw.ElapsedMilliseconds);
+
         SceneManager.LoadScene("ARScene");
     }
 
