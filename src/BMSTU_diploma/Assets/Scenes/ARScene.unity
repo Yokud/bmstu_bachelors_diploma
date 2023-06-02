@@ -394,8 +394,7 @@ GameObject:
   - component: {fileID: 287486373}
   - component: {fileID: 287486372}
   - component: {fileID: 287486371}
-  - component: {fileID: 287486374}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: PlaneGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -422,7 +421,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 69b949f02dba5d64e969ea22ba6051df, type: 2}
+  - {fileID: 2100000, guid: e7ccb5d1ec226ea42b48985eb9615de6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -467,20 +466,6 @@ Transform:
   m_Father: {fileID: 2093910743}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &287486374
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 287486370}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &395868701
 GameObject:
   m_ObjectHideFlags: 0
@@ -588,14 +573,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 395868701}
-  m_LocalRotation: {x: 0.42195708, y: 0.042306196, z: -0.019779539, w: 0.9054122}
+  m_LocalRotation: {x: 0.0003985975, y: 0.07584019, z: 0.22519068, w: 0.9713585}
   m_LocalPosition: {x: 90, y: 182.5, z: -90}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 49.975, y: 5.346, z: -0.01}
+  m_LocalEulerAnglesHint: {x: -1.913, y: 8.488, z: 25.963}
 --- !u!1 &434673994
 GameObject:
   m_ObjectHideFlags: 0
@@ -1306,7 +1291,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2093910743}
   - component: {fileID: 2093910742}
-  - component: {fileID: 2093910741}
   - component: {fileID: 2093910740}
   - component: {fileID: 2093910746}
   - component: {fileID: 2093910749}
@@ -1334,18 +1318,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlaneGrid: {fileID: 287486370}
   Background: {fileID: 1477954019}
-  MinMatchPointsCount: 4
-  MaxMatchPointsCount: 10
   MeshHeight: 320
   CalibrationText: {fileID: 29219033}
---- !u!81 &2093910741
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2093910739}
-  m_Enabled: 0
 --- !u!20 &2093910742
 Camera:
   m_ObjectHideFlags: 0
