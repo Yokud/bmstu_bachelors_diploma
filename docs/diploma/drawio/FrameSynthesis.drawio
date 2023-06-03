@@ -1,21 +1,21 @@
-<mxfile host="Electron" modified="2023-06-02T22:32:33.584Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.8 Chrome/112.0.5615.165 Electron/24.2.0 Safari/537.36" etag="USH44n22AE6OwdS_Zlt4" version="21.2.8" type="device">
+<mxfile host="Electron" modified="2023-06-03T11:23:40.396Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.8 Chrome/112.0.5615.165 Electron/24.2.0 Safari/537.36" etag="sh-7-061iRWGSWqvS418" version="21.2.8" type="device">
   <diagram name="Страница 1" id="AO4O5z5sK-C0G2AqcGY6">
     <mxGraphModel dx="2053" dy="1188" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="uEjg-0dBS9y6b1V8KLUG-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;" edge="1" parent="1" source="uEjg-0dBS9y6b1V8KLUG-1" target="uEjg-0dBS9y6b1V8KLUG-3">
+        <mxCell id="uEjg-0dBS9y6b1V8KLUG-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;" parent="1" source="uEjg-0dBS9y6b1V8KLUG-1" target="uEjg-0dBS9y6b1V8KLUG-3" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="uEjg-0dBS9y6b1V8KLUG-1" value="Синтез конечного изображения виртуальной сцены" style="verticalLabelPosition=middle;verticalAlign=middle;html=1;shape=process;whiteSpace=wrap;rounded=0;size=0.14;arcSize=6;strokeWidth=2;labelPosition=center;align=center;fontSize=18;" vertex="1" parent="1">
+        <mxCell id="uEjg-0dBS9y6b1V8KLUG-1" value="Синтез конечного изображения виртуальной сцены" style="verticalLabelPosition=middle;verticalAlign=middle;html=1;shape=process;whiteSpace=wrap;rounded=0;size=0.14;arcSize=6;strokeWidth=2;labelPosition=center;align=center;fontSize=18;" parent="1" vertex="1">
           <mxGeometry x="314" y="240" width="200" height="120" as="geometry" />
         </mxCell>
-        <mxCell id="uEjg-0dBS9y6b1V8KLUG-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="uEjg-0dBS9y6b1V8KLUG-6" target="uEjg-0dBS9y6b1V8KLUG-1">
+        <mxCell id="uEjg-0dBS9y6b1V8KLUG-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" parent="1" source="uEjg-0dBS9y6b1V8KLUG-6" target="uEjg-0dBS9y6b1V8KLUG-1" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="414" y="230" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="uEjg-0dBS9y6b1V8KLUG-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="uEjg-0dBS9y6b1V8KLUG-2" target="uEjg-0dBS9y6b1V8KLUG-6">
+        <mxCell id="uEjg-0dBS9y6b1V8KLUG-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" parent="1" source="uEjg-0dBS9y6b1V8KLUG-2" target="uEjg-0dBS9y6b1V8KLUG-6" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="414" y="120" />
@@ -23,13 +23,13 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="uEjg-0dBS9y6b1V8KLUG-2" value="Начало" style="strokeWidth=2;html=1;shape=stencil(xVVNb4MwDP01HJmAaFV7nFh37GWTdnapC1FDgpysH/9+gYBaSukgl0kc8DO85+fYSsBSXUCFQRJJKDFg70GSfCGVXIJRZAObKRy8iFx4cuFq6ULQFWbGYUcgDluBLqMNqQOe+M60DFwWSNzUWbYOojf7Tf2wNFNSWhKupO5lbvKWDLi0/0ZnRxa9vDqZSxu7qLIKJRqkHno1t3FAkHx4K8XTlD49lPqOOt2/lL7nK8V+Smuf7sX3YvHEDm48jD2QW64mHpiXXMc+351XMwdyk92NyLHUImMLyNItZIec1I/cPSyygnq5B4kuXaojXqtnd/P9zH/HILi8YVgs5zMAZfaFWobuH7r0azqHcOY6JGWgbkOPXwDlGFqecC8g76X0CbG6gduzf1zuwsPxXc+mUfyjZZ8zzoTS+GQTLD6YswYdGU6W7hXhk6ndcyHc7TS2EAOCBnV3ZQP8Ag==);whiteSpace=wrap;fontSize=18;" vertex="1" parent="1">
+        <mxCell id="uEjg-0dBS9y6b1V8KLUG-2" value="Начало" style="strokeWidth=2;html=1;shape=stencil(xVVNb4MwDP01HJmAaFV7nFh37GWTdnapC1FDgpysH/9+gYBaSukgl0kc8DO85+fYSsBSXUCFQRJJKDFg70GSfCGVXIJRZAObKRy8iFx4cuFq6ULQFWbGYUcgDluBLqMNqQOe+M60DFwWSNzUWbYOojf7Tf2wNFNSWhKupO5lbvKWDLi0/0ZnRxa9vDqZSxu7qLIKJRqkHno1t3FAkHx4K8XTlD49lPqOOt2/lL7nK8V+Smuf7sX3YvHEDm48jD2QW64mHpiXXMc+351XMwdyk92NyLHUImMLyNItZIec1I/cPSyygnq5B4kuXaojXqtnd/P9zH/HILi8YVgs5zMAZfaFWobuH7r0azqHcOY6JGWgbkOPXwDlGFqecC8g76X0CbG6gduzf1zuwsPxXc+mUfyjZZ8zzoTS+GQTLD6YswYdGU6W7hXhk6ndcyHc7TS2EAOCBnV3ZQP8Ag==);whiteSpace=wrap;fontSize=18;" parent="1" vertex="1">
           <mxGeometry x="294" y="40" width="240" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="uEjg-0dBS9y6b1V8KLUG-3" value="Конец" style="strokeWidth=2;html=1;shape=stencil(xVVNb4MwDP01HJmAaFV7nFh37GWTdnapC1FDgpysH/9+gYBaSukgl0kc8DO85+fYSsBSXUCFQRJJKDFg70GSfCGVXIJRZAObKRy8iFx4cuFq6ULQFWbGYUcgDluBLqMNqQOe+M60DFwWSNzUWbYOojf7Tf2wNFNSWhKupO5lbvKWDLi0/0ZnRxa9vDqZSxu7qLIKJRqkHno1t3FAkHx4K8XTlD49lPqOOt2/lL7nK8V+Smuf7sX3YvHEDm48jD2QW64mHpiXXMc+351XMwdyk92NyLHUImMLyNItZIec1I/cPSyygnq5B4kuXaojXqtnd/P9zH/HILi8YVgs5zMAZfaFWobuH7r0azqHcOY6JGWgbkOPXwDlGFqecC8g76X0CbG6gduzf1zuwsPxXc+mUfyjZZ8zzoTS+GQTLD6YswYdGU6W7hXhk6ndcyHc7TS2EAOCBnV3ZQP8Ag==);whiteSpace=wrap;fontSize=18;" vertex="1" parent="1">
+        <mxCell id="uEjg-0dBS9y6b1V8KLUG-3" value="Конец" style="strokeWidth=2;html=1;shape=stencil(xVVNb4MwDP01HJmAaFV7nFh37GWTdnapC1FDgpysH/9+gYBaSukgl0kc8DO85+fYSsBSXUCFQRJJKDFg70GSfCGVXIJRZAObKRy8iFx4cuFq6ULQFWbGYUcgDluBLqMNqQOe+M60DFwWSNzUWbYOojf7Tf2wNFNSWhKupO5lbvKWDLi0/0ZnRxa9vDqZSxu7qLIKJRqkHno1t3FAkHx4K8XTlD49lPqOOt2/lL7nK8V+Smuf7sX3YvHEDm48jD2QW64mHpiXXMc+351XMwdyk92NyLHUImMLyNItZIec1I/cPSyygnq5B4kuXaojXqtnd/P9zH/HILi8YVgs5zMAZfaFWobuH7r0azqHcOY6JGWgbkOPXwDlGFqecC8g76X0CbG6gduzf1zuwsPxXc+mUfyjZZ8zzoTS+GQTLD6YswYdGU6W7hXhk6ndcyHc7TS2EAOCBnV3ZQP8Ag==);whiteSpace=wrap;fontSize=18;" parent="1" vertex="1">
           <mxGeometry x="294" y="380" width="240" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="uEjg-0dBS9y6b1V8KLUG-6" value="&amp;nbsp; Кадр окружения, форма тени" style="shape=parallelogram;html=1;strokeWidth=2;perimeter=parallelogramPerimeter;whiteSpace=wrap;rounded=0;arcSize=12;size=0.23;fontSize=18;" vertex="1" parent="1">
+        <mxCell id="uEjg-0dBS9y6b1V8KLUG-6" value="&amp;nbsp; Кадр окружения, форма тени" style="shape=parallelogram;html=1;strokeWidth=2;perimeter=parallelogramPerimeter;whiteSpace=wrap;rounded=0;arcSize=12;size=0.23;fontSize=18;" parent="1" vertex="1">
           <mxGeometry x="314" y="130" width="200" height="90" as="geometry" />
         </mxCell>
       </root>
