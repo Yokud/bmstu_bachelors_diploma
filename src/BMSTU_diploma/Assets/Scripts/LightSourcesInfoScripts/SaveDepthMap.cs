@@ -5,11 +5,9 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-public class SaveDepthPano : MonoBehaviour
+public class SaveDepthMap : MonoBehaviour
 {
     public Button SavePanoButton;
 
@@ -21,7 +19,7 @@ public class SaveDepthPano : MonoBehaviour
 
     public void ReadDepthPano()
     {
-        string path = EditorUtility.OpenFilePanel("Select spherical environment depth image", "", "png");
+        string path = EditorUtility.OpenFilePanel("Select environment depth image", "", "png");
         if (path.Length != 0)
         {
             byte[] fileData = File.ReadAllBytes(path);
@@ -40,7 +38,7 @@ public class SaveDepthPano : MonoBehaviour
 
             var fileContent = new Mat(tex.height, tex.width, MatType.CV_16UC3, rgbPixels.Reverse().ToArray());
 
-            EnvDataFields.SphereDepthPano = fileContent;
+            EnvDataFields.DepthMap = fileContent;
         }
     }
 }

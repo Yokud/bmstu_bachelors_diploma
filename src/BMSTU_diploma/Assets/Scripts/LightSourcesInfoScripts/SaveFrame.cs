@@ -1,4 +1,3 @@
-using OpenCvSharp;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SavePano : MonoBehaviour
+public class SaveFrame : MonoBehaviour
 {
     public Button SavePanoButton;
 
@@ -18,7 +17,7 @@ public class SavePano : MonoBehaviour
 
     public void ReadPano()
     {
-        string path = EditorUtility.OpenFilePanel("Select spherical environment image", "", "png");
+        string path = EditorUtility.OpenFilePanel("Select frame environment image", "", "png");
         if (path.Length != 0)
         {
             byte[] fileData = File.ReadAllBytes(path);
@@ -26,7 +25,7 @@ public class SavePano : MonoBehaviour
             tex.LoadImage(fileData);
             var fileContent = OpenCvSharp.Unity.TextureToMat(tex);
 
-            EnvDataFields.SpherePano = fileContent;
+            EnvDataFields.Frame = fileContent;
         }
     }
 }

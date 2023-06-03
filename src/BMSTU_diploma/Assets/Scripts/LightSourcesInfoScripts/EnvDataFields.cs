@@ -7,5 +7,7 @@ public static class EnvDataFields
 {
     public static Mat SpherePano, SphereDepthPano;
 
+    public static Mat Frame, DepthMap;
+
     public static List<Vector3> LightCoords;
 }

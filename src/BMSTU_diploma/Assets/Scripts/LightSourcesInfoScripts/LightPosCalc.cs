@@ -6,7 +6,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System.Diagnostics;
 
 public class LightPosCalc : MonoBehaviour
 {
@@ -27,8 +26,6 @@ public class LightPosCalc : MonoBehaviour
 
     public void Calc()
     {
-        Stopwatch sw = Stopwatch.StartNew();
-
         if (EnvDataFields.SpherePano == null || EnvDataFields.SphereDepthPano == null)
         {
             UnityEngine.Debug.Log("Environment data are not loaded yet");
@@ -101,10 +98,6 @@ public class LightPosCalc : MonoBehaviour
         }
 
         EnvDataFields.LightCoords = decartCoords.ToList();
-
-        sw.Stop();
-
-        UnityEngine.Debug.Log(sw.ElapsedMilliseconds);
 
         SceneManager.LoadScene("ARScene");
     }

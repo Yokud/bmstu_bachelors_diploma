@@ -54,6 +54,8 @@ public class KinectManager : MonoBehaviour
     Image bg;
     RectTransform bgRectTransform;
 
+    bool fixedFrame;
+
     public Text CalibrationText;
 
     // returns the single KinectManager instance
@@ -168,17 +170,42 @@ public class KinectManager : MonoBehaviour
 
         cam = Camera.main;
 
+        SetupArrays();
+
+        fixedFrame = EnvDataFields.Frame != null && EnvDataFields.DepthMap != null;
+
+        if (fixedFrame)
+        {
+            ReadDepthFromDepthMap();
+            NormalizeDepthValues();
+            UpdateMesh();
+
+            bgRectTransform = Background.GetComponent<RectTransform>();
+            ColorTexture = OpenCvSharp.Unity.MatToTexture(EnvDataFields.Frame);
+            ColorTexture.Apply();
+            UpdateBackground();
+
+            return;
+        }
+
         GetFrustumParams(Background.transform.position.z, out float bgHeight, out float bgWidth);
         bgRectTransform = Background.GetComponent<RectTransform>();
         bgRectTransform.sizeDelta = new Vector2(bgWidth, bgHeight);
+    }
 
-        SetupArrays();
+    void ReadDepthFromDepthMap()
+    {
+        for (int i = 0; i < mapSize; i++)
+        {
+            var screenCoords = GetScreenCoords(i);
+            depthMap[mapSize - i - 1] = EnvDataFields.DepthMap.Get<Vec3w>((int)screenCoords.y, (int)screenCoords.x)[0];
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (kinectInitialized)
+        if (kinectInitialized && !fixedFrame)
         {
             if (depthStreamHandle != IntPtr.Zero && KinectWrapper.PollDepth(depthStreamHandle, KinectWrapper.Constants.IsNearMode, ref depthMap))
             {
