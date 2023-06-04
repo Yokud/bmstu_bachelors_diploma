@@ -23,7 +23,7 @@ public class SaveDepthMap : MonoBehaviour
         if (path.Length != 0)
         {
             byte[] fileData = File.ReadAllBytes(path);
-            var tex = new Texture2D(2, 2, TextureFormat.RGBA64, false);
+            var tex = new Texture2D(2, 2, TextureFormat.RGB48, false);
             tex.LoadImage(fileData);
 
             Color[] pixels = tex.GetPixels();
