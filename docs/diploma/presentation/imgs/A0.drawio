@@ -1,0 +1,88 @@
+<mxfile host="Electron" modified="2023-06-05T17:34:18.635Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.8 Chrome/112.0.5615.165 Electron/24.2.0 Safari/537.36" etag="RKJ6pDFvxQ6BFf_6iBRX" version="21.2.8" type="device">
+  <diagram name="Страница 1" id="UU5-yE8nuxFqdstkXE4J">
+    <mxGraphModel dx="2058" dy="1188" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="aO-G5OvAktW4F5CvAwaW-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="aO-G5OvAktW4F5CvAwaW-1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="790" y="410" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="790" y="410" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="aO-G5OvAktW4F5CvAwaW-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;startArrow=classic;startFill=1;endArrow=none;endFill=0;" parent="1" source="aO-G5OvAktW4F5CvAwaW-1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="507" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="aO-G5OvAktW4F5CvAwaW-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;startArrow=classic;startFill=1;endArrow=none;endFill=0;" parent="1" source="aO-G5OvAktW4F5CvAwaW-1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="302" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="aO-G5OvAktW4F5CvAwaW-1" value="&lt;font style=&quot;font-size: 25px;&quot;&gt;Метод наложения теней в дополненной реальности на основе информации о глубине точек кадра&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="200" y="270" width="410" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="aO-G5OvAktW4F5CvAwaW-7" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.001;entryY=0.071;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" target="aO-G5OvAktW4F5CvAwaW-1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="40" y="290" as="sourcePoint" />
+            <mxPoint x="220" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="aO-G5OvAktW4F5CvAwaW-8" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.1;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="40" y="360" as="sourcePoint" />
+            <mxPoint x="200" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="aO-G5OvAktW4F5CvAwaW-9" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.1;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="40" y="420" as="sourcePoint" />
+            <mxPoint x="200" y="420" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="aO-G5OvAktW4F5CvAwaW-10" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.1;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="40" y="480" as="sourcePoint" />
+            <mxPoint x="200" y="480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="aO-G5OvAktW4F5CvAwaW-11" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.1;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="40" y="540" as="sourcePoint" />
+            <mxPoint x="200" y="540" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="aO-G5OvAktW4F5CvAwaW-13" value="Сферическая панорама окружения" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="50" y="240" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="aO-G5OvAktW4F5CvAwaW-14" value="Сферическая панорама глубины окружения" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="40" y="310" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="aO-G5OvAktW4F5CvAwaW-15" value="Виртуальный трехмерный объект" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="40" y="380" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="aO-G5OvAktW4F5CvAwaW-16" value="Кадр окружения" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="40" y="440" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="aO-G5OvAktW4F5CvAwaW-17" value="Кадр глубины окружения" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="40" y="500" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="aO-G5OvAktW4F5CvAwaW-18" value="Алгоритм поиска положения источников света" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="310" y="160" width="130" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="aO-G5OvAktW4F5CvAwaW-19" value="Алгоритм наложения теней" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="510" y="160" width="90" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="aO-G5OvAktW4F5CvAwaW-20" value="Изображение с наложенной тенью от виртуального объекта" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="640" y="310" width="130" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="aO-G5OvAktW4F5CvAwaW-21" value="A0" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="550" y="510" width="60" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
